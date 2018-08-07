@@ -1,5 +1,5 @@
  //控制层 
-app.controller('typeTemplateController' ,function($scope,$controller   ,typeTemplateService){	
+ app.controller('typeTemplateController', function ($scope, $controller, typeTemplateService, brandService, specificationService) {
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -76,5 +76,30 @@ app.controller('typeTemplateController' ,function($scope,$controller   ,typeTemp
 			}			
 		);
 	}
-    
-});	
+
+     // 定义新建按钮弹窗中的，品牌列表数据, 可为空$scope.brandList={data:[]};
+     $scope.brandList = {data: []};
+
+     // 读取品牌列表
+     $scope.findBrandList = function () {
+         brandService.selectOptionList().success(
+             function (response) {
+                 $scope.brandList = {data: response};
+             }
+         );
+     }
+
+     // 定义新建按钮弹窗中的，规格列表数据, 可为空$scope.specList={data:[]};
+     $scope.specList = {data: []};
+
+     // 读取品牌列表
+     $scope.findSpecList = function () {
+         specificationService.selectOptionList().success(
+             function (response) {
+                 $scope.specList = {data: response};
+             }
+         );
+     }
+
+
+ });

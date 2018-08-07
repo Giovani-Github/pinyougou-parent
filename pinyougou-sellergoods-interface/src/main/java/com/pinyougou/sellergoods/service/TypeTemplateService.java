@@ -59,5 +59,5 @@ public interface TypeTemplateService {
      * @return
      */
     public PageResult findPage(TbTypeTemplate typeTemplate, int pageNum, int pageSize);
-
+    
 }

@@ -16,6 +16,7 @@ import entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 服务实现层
@@ -25,9 +26,9 @@ import java.util.List;
 @Service
 public class SpecificationServiceImpl implements SpecificationService {
 
+
     @Autowired
     private TbSpecificationMapper specificationMapper;
-
     @Autowired
     private TbSpecificationOptionMapper specificationOptionMapper;
 
@@ -35,6 +36,7 @@ public class SpecificationServiceImpl implements SpecificationService {
      * 查询全部
      */
     @Override
+
     public List<TbSpecification> findAll() {
         return specificationMapper.selectByExample(null);
     }
@@ -147,6 +149,11 @@ public class SpecificationServiceImpl implements SpecificationService {
 
         Page<TbSpecification> page = (Page<TbSpecification>) specificationMapper.selectByExample(example);
         return new PageResult(page.getTotal(), page.getResult());
+    }
+
+    @Override
+    public List<Map> selectOptionList() {
+        return specificationMapper.selectOptionList();
     }
 
 }

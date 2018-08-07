@@ -149,4 +149,14 @@
 
    > 引用: [mybatis(错误一) 项目启动时报“Result Maps collection already contains value forxxx”的解决方案]([https://blog.csdn.net/zengdeqing2012/article/details/46340357]())
    >
-   > 原因：下载了个可以直接运行的eclipse 项目，再与之前的项目对比，好像也没什么不同。最后使绝招：代码对比工具，发现生成的PetMapper.xml多了几百行！原来是我在运行时没有把之前已经生成的PetMapper.xml删除掉，再次生成代码时，又附加了上去！所以在运行代码生成之前，要把以前已经生成的xml文件清掉，以防出错。 
+   > 原因：下载了个可以直接运行的eclipse 项目，再与之前的项目对比，好像也没什么不同。最后使绝招：代码对比工具，发现生成的PetMapper.xml多了几百行！原来是我在运行时没有把之前已经生成的PetMapper.xml删除掉，再次生成代码时，又附加了上去！所以在运行代码生成之前，要把以前已经生成的xml文件清掉，以防出错。
+
+4. 注意，`angularJs`中`ng-model`属性不可定义空值
+
+5. 注意，写完`Contrller`记得加注解`@requestMapping()`
+
+6. 注意，虚拟机中的`liunx`可能ip地址会自动更改，导致dobbox服务注册不上
+
+7. 注意，页面功能不跟预期一致，可能是浏览器缓存导致
+
+8. `select2`下拉列表插件，出现`loding`加载动画，导致选择异常问题。查看对应的数据库表中是否有`null`值

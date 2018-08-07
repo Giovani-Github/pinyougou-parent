@@ -11,6 +11,7 @@ import entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 品牌服务层接口实现类
@@ -86,5 +87,11 @@ public class BrandServiceImpl implements BrandService {
 
         return new PageResult(page.getTotal(), page.getResult());
     }
+
+    @Override
+    public List<Map> selectOptionList() {
+        return brandMapper.selectOptionList();
+    }
+
 
 }

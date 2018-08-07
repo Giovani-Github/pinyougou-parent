@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 品牌信息数据请求处理
@@ -143,4 +144,16 @@ public class BrandController {
         return brandService.findPage(page, rows, brand);
     }
 
+    /**
+     * 获取品牌下拉框列表数据
+     *
+     * @param
+     * @return java.util.List<java.util.Map>
+     * @Author Giovani
+     * @Date 2018/8/7 21:59
+     */
+    @RequestMapping("/selectOptionList")
+    public List<Map> selectOptionList() {
+        return brandService.selectOptionList();
+    }
 }

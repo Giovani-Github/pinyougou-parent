@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * controller
@@ -119,4 +120,16 @@ public class SpecificationController {
         return specificationService.findPage(specification, page, rows);
     }
 
+    /**
+     * 获取规格下拉列表数据
+     *
+     * @param
+     * @return java.util.List<java.util.Map>
+     * @Author Giovani
+     * @Date 2018/8/7 22:28
+     */
+    @RequestMapping("/selectOptionList")
+    public List<Map> selectOptionList() {
+        return specificationService.selectOptionList();
+    }
 }

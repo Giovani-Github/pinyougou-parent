@@ -5,6 +5,7 @@ import com.pinyougou.pojogroup.Specification;
 import entity.PageResult;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 服务层接口
@@ -60,5 +61,15 @@ public interface SpecificationService {
      * @return
      */
     public PageResult findPage(TbSpecification specification, int pageNum, int pageSize);
+
+    /**
+     * 规格数据下拉列表
+     *
+     * @param
+     * @return java.util.List<java.util.Map>
+     * @Author Giovani
+     * @Date 2018/8/7 22:24
+     */
+    List<Map> selectOptionList();
 
 }
