@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns="http://www.springframework.org/schema/security"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+              http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <!--
+      以下页面不被拦截
+      /*  表示的是该目录下的资源，只包括本级目录不包括下级目录
+      /** 表示的是该目录以及该目录下所有级别子目录的资源
+    -->
+    <http pattern="/*.html" security="none"></http>
+    <http pattern="/css/**" security="none"></http>
+    <http pattern="/img/**" security="none"></http>
+    <http pattern="/js/**" security="none"></http>
+    <http pattern="/plugins/**" security="none"></http>
+
+    <http pattern="/seller/add.do" security="none"></http>
+
+    <!--页面拦截规则-->
+    <http use-expressions="false">
+        <!--
+            使用自定义拦截器里面定义的角色
+            use-expressions 为是否使用使用 Spring 表达式语言（ SpEL ），默认为true
+            如果开启，则拦截的配置应该写成以下形式
+            <intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
+        -->
+        <intercept-url pattern="/**" access="ROLE_SELLER"/>
+        <!--
+            开启表单登录
+            login-page：指定登录页面。
+            authentication-failure-url：指定了身份验证失败时跳转到的页面。
+            default-target-url：指定了成功进行身份验证和授权后默认呈现给用户的页面。
+            always-use-default-target：指定了是否在身份验证通过后总是跳转到default-target-url属性指定的URL。
+        -->
+        <form-login login-page="/shoplogin.html" default-target-url="/admin/index.html"
+                    authentication-failure-url="/shoplogin.html" always-use-default-target="true"></form-login>
+
+        <!--
+            csrf disabled="true"  关闭csrf ,如果不加会出现错误
+            CSRF（Cross-site request forgery）跨站请求伪造，也被称为“One Click Attack”或者Session Riding，通常缩写为CSRF或者XSRF，是一种对网站的恶意利用。
+        -->
+        <csrf disabled="true"/>
+
+        <!--
+            如果你在系统中使用了框架页（页面套页面ifream），需要设置框架页的策略为SAMEORIGIN
+        -->
+        <headers>
+            <frame-options policy="SAMEORIGIN"/>
+        </headers>
+
+        <!--
+            加此配置后，会自动的产生退出登录的地址/logout,如果你不想用这个地址 ，你也可以定义生成的退出地址以及跳转的页面，配置如下
+            <logout logout-url="" logout-success-url=""/>
+            logout-url:退出的地址，会自动生成
+            logout-success-url:退出后跳转的地址
+
+        -->
+        <logout/>
+    </http>
+
+    <!-- 认证管理器 -->
+    <authentication-manager>
+        <!-- 使用自定义认证类进行登录认证 -->
+        <authentication-provider user-service-ref="userDetailService">
+        </authentication-provider>
+    </authentication-manager>
+
+    <!-- 自定义认证类 -->
+    <beans:bean id="userDetailService" class="com.pinyougou.service.UserDetailsServiceImpl">
+        <beans:property name="sellerService" ref="sellerService"></beans:property>
+    </beans:bean>
+
+    <!--
+        引用dubbo 服务
+        因为没有com.pinyougou.service配置到dobbox的注解扫描中，所以需要手动注入
+    -->
+    <dubbo:application name="pinyougou-shop-web"/>
+    <dubbo:registry address="zookeeper://192.168.25.131:2181"/>
+    <dubbo:reference id="sellerService" interface="com.pinyougou.sellergoods.service.SellerService">
+    </dubbo:reference>
+
+</beans:beans>
