@@ -66,6 +66,8 @@
     <authentication-manager>
         <!-- 使用自定义认证类进行登录认证 -->
         <authentication-provider user-service-ref="userDetailService">
+            <!-- 密码通过bcrypt算法加密过后，需要告诉security框架，密码需要通过bcrypt进行解码对比 -->
+            <password-encoder ref="bcryptEncoder"></password-encoder>
         </authentication-provider>
     </authentication-manager>
 
@@ -82,5 +84,7 @@
     <dubbo:registry address="zookeeper://192.168.25.131:2181"/>
     <dubbo:reference id="sellerService" interface="com.pinyougou.sellergoods.service.SellerService">
     </dubbo:reference>
+
+    <beans:bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 
 </beans:beans>
