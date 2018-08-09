@@ -118,4 +118,23 @@ public class SellerController {
         return sellerService.findPage(seller, page, rows);
     }
 
+    /**
+     * 根据id更新商家审核状态
+     *
+     * @param
+     * @return entity.Result
+     * @Author Giovani
+     * @Date 2018/8/9 16:35
+     */
+    @RequestMapping("/updateStatus")
+    public Result updateStatus(String sellerId, String status) {
+        try {
+            sellerService.updateStatus(sellerId, status);
+            return new Result(true, "修改成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "修改失败");
+        }
+    }
 }
+

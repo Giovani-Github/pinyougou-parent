@@ -60,4 +60,14 @@ public interface SellerService {
      */
     public PageResult findPage(TbSeller seller, int pageNum, int pageSize);
 
+    /**
+     * 更新审核状态
+     *
+     * @param
+     * @return void
+     * @Author Giovani
+     * @Date 2018/8/9 16:31
+     */
+    public void updateStatus(String sellerId, String status);
+
 }
