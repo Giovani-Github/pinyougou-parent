@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * controller
@@ -116,5 +117,18 @@ public class TypeTemplateController {
     @RequestMapping("/search")
     public PageResult search(@RequestBody TbTypeTemplate typeTemplate, int page, int rows) {
         return typeTemplateService.findPage(typeTemplate, page, rows);
+    }
+
+    /**
+     * 获取类型模板下拉框列表数据
+     *
+     * @param
+     * @return java.util.List<java.util.Map>
+     * @Author Giovani
+     * @Date 2018/8/10 14:42
+     */
+    @RequestMapping("/selectOptionList")
+    public List<Map> selectOptionList() {
+        return typeTemplateService.selectOptionList();
     }
 }

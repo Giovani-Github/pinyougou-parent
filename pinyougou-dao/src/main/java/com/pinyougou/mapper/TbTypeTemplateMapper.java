@@ -5,6 +5,7 @@ import com.pinyougou.pojo.TbTypeTemplateExample;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TbTypeTemplateMapper {
     int countByExample(TbTypeTemplateExample example);
@@ -29,4 +30,13 @@ public interface TbTypeTemplateMapper {
 
     int updateByPrimaryKey(TbTypeTemplate record);
 
+    /**
+     * 获取类型模板下拉框列表数据
+     *
+     * @param
+     * @return java.util.List<java.util.Map>
+     * @Author Giovani
+     * @Date 2018/8/10 14:44
+     */
+    List<Map> selectOptionList();
 }

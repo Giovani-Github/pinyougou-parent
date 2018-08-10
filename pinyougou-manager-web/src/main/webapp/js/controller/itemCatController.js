@@ -1,5 +1,5 @@
  //控制层 
-app.controller('itemCatController' ,function($scope,$controller   ,itemCatService){	
+ app.controller('itemCatController', function ($scope, $controller, itemCatService, typeTemplateService) {
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -37,13 +37,16 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 		if($scope.entity.id!=null){//如果有ID
 			serviceObject=itemCatService.update( $scope.entity ); //修改  
 		}else{
+
+            $scope.entity.parentId = $scope.parentId;//赋予上级ID
+
 			serviceObject=itemCatService.add( $scope.entity  );//增加 
 		}				
 		serviceObject.success(
 			function(response){
 				if(response.success){
-					//重新查询 
-		        	$scope.reloadList();//重新加载
+                    //重新查询
+                    $scope.findByParentId($scope.parentId);
 				}else{
 					alert(response.message);
 				}
@@ -58,7 +61,7 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 		itemCatService.dele( $scope.selectIds ).success(
 			function(response){
 				if(response.success){
-					$scope.reloadList();//刷新列表
+                    $scope.findByParentId($scope.parentId);//刷新列表
 					$scope.selectIds=[];
 				}						
 			}		
@@ -77,8 +80,15 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 		);
 	}
 
+     // 商品新增，当前显示的是哪一分类的列表，我们就将这个商品分类新增到这个分类下
+     $scope.parentId = 0;// 记录当前分类的上级id
+
     //根据上级ID显示下级列表
     $scope.findByParentId = function (parentId) {
+
+        // 记录上级id
+        $scope.parentId = parentId;
+
         itemCatService.findByParentId(parentId).success(
             function (response) {
                 $scope.list = response;
@@ -108,6 +118,16 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
         $scope.findByParentId(p_entity.id);	//查询此级下级列表
     }
 
+     // 定义新建按钮弹窗中的，规格列表数据, 可为空$scope.specList={data:[]};
+     $scope.typeTemplateList = {data: []};
 
+     // 规格列表数据
+     $scope.findTypeTemplateList = function () {
+         typeTemplateService.selectOptionList().success(
+             function (response) {
+                 $scope.typeTemplateList = {data: response};
+             }
+         );
+     }
 
-});	
+ });
