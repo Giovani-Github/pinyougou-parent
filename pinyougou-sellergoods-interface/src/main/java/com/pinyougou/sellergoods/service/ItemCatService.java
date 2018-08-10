@@ -1,8 +1,8 @@
 package com.pinyougou.sellergoods.service;
-import java.util.List;
 import com.pinyougou.pojo.TbItemCat;
-
 import entity.PageResult;
+
+import java.util.List;
 /**
  * 服务层接口
  * @author Administrator
@@ -15,26 +15,22 @@ public interface ItemCatService {
 	 * @return
 	 */
 	public List<TbItemCat> findAll();
-	
-	
+
 	/**
 	 * 返回分页列表
 	 * @return
 	 */
 	public PageResult findPage(int pageNum, int pageSize);
-	
-	
+
 	/**
 	 * 增加
-	*/
+	 */
 	public void add(TbItemCat itemCat);
-	
-	
+
 	/**
 	 * 修改
 	 */
 	public void update(TbItemCat itemCat);
-	
 
 	/**
 	 * 根据ID获取实体
@@ -42,8 +38,7 @@ public interface ItemCatService {
 	 * @return
 	 */
 	public TbItemCat findOne(Long id);
-	
-	
+
 	/**
 	 * 批量删除
 	 * @param ids
@@ -57,5 +52,15 @@ public interface ItemCatService {
 	 * @return
 	 */
 	public PageResult findPage(TbItemCat itemCat, int pageNum, int pageSize);
-	
+
+	/**
+	 * 根据上级id返回列表
+	 *
+	 * @param
+	 * @return java.util.List<com.pinyougou.pojo.TbItemCat>
+	 * @Author Giovani
+	 * @Date 2018/8/10 13:55
+	 */
+	public List<TbItemCat> findByParentId(Long parentId);
+
 }

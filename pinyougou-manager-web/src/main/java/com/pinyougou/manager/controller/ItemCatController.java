@@ -118,4 +118,17 @@ public class ItemCatController {
         return itemCatService.findPage(itemCat, page, rows);
     }
 
+    /**
+     * 根据上级ID查询列表
+     *
+     * @param
+     * @return java.util.List<com.pinyougou.pojo.TbItemCat>
+     * @Author Giovani
+     * @Date 2018/8/10 14:07
+     */
+    @RequestMapping("/findByParentId")
+    public List<TbItemCat> findByParentId(Long parentId) {
+        return itemCatService.findByParentId(parentId);
+    }
+
 }
