@@ -220,6 +220,71 @@ app.controller('goodsController', function ($scope, $controller, goodsService, u
         }
     }
 
+    //创建SKU列表
+    // 思路：
+    // （1）我们先定义一个初始的不带规格名称的集合，只有一条记录。
+    // （2）循环用户选择的规格，根据规格名称和已选择的规格选项对原集合进行扩充，添加规格名称和值，新增的记录数与选择的规格选项个数相同
+
+    $scope.createItemList = function () {
+
+        // (1) 我们先定义一个初始的不带规格名称的集合，只有一条记录。这个代表sku的一行数据
+        $scope.entity.itemList = [{spec: {}, price: 0, num: 99999, status: '0', isDefault: '0'}];
+
+        // (2) 循环用户选择的规格，根据规格名称和已选择的规格选项对原集合进行扩充
+        // 例子数据：$scope.entity.goodsDesc.specificationItems如下：
+        // [{"attributeName":"网络","attributeValue":["双卡","电信2G","联通2G"]},{"attributeName":"机身内存","attributeValue":["128G","64G"]}]
+        var items = $scope.entity.goodsDesc.specificationItems;
+
+        for (var i = 0; i < items.length; i++) {
+
+            // 一次循环，取出一组数据：
+            // 例子如下：items[i]如下：
+            // {"attributeName":"网络","attributeValue":["双卡","电信2G","联通2G"]}
+            $scope.entity.itemList = addColumn($scope.entity.itemList, items[i].attributeName, items[i].attributeValue);
+        }
+    }
+
+    //添加列值
+    // list：就是多行sku数据
+    // columnName：{"attributeName":"网络","attributeValue":["双卡","电信2G","联通2G"]}中的attributeName，即：网络
+    // conlumnValues：{"attributeName":"网络","attributeValue":["双卡","电信2G","联通2G"]}中的attributeValue，即：
+    // ["双卡","电信2G","联通2G"]
+    addColumn = function (list, columnName, conlumnValues) {
+        var newList = [];//新的集合
+
+        // 遍历当前sku的数据有多少行
+        // 例如：[{spec: {}, price: 0, num: 99999, status: '0', isDefault: '0'}]
+        // 就只有一行
+        for (var i = 0; i < list.length; i++) {
+
+            // 取出{spec: {}, price: 0, num: 99999, status: '0', isDefault: '0'}
+            var oldRow = list[i];
+
+            // 遍历
+            // {"attributeName":"网络","attributeValue":["双卡","电信2G","联通2G"]}
+            // 中的attributeValue，即：["双卡","电信2G","联通2G"]
+            for (var j = 0; j < conlumnValues.length; j++) {
+
+                // 深克隆：把一个对象的值，完整克隆过来，两个对象指向不用引用
+                // 浅克隆：把一个对象的引用赋值个另一个对象。两个对象指向同一个引用
+
+                // 进行深克隆
+                // JSON.stringify把对象转成json，得到一个json值
+                // JSON.parse重新把json转成一个对象。
+                // 如此形成深克隆
+                // 此时的newRow:
+                // {spec: {}, price: 0, num: 99999, status: '0', isDefault: '0'}
+                var newRow = JSON.parse(JSON.stringify(oldRow));
+
+                // 添加值
+                // 循环完成后形成：{spec: {[{"网络": ["双卡","电信2G","联通2G"]},...]}, price: 0, num: 99999, status: '0', isDefault: '0'}格式
+                newRow.spec[columnName] = conlumnValues[j];
+                newList.push(newRow);
+            }
+        }
+
+        return newList;
+    }
 
 
 });
