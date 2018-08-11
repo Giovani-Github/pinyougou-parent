@@ -1,5 +1,5 @@
 //控制层
-app.controller('goodsController', function ($scope, $controller, goodsService, uploadService) {
+app.controller('goodsController', function ($scope, $controller, goodsService, uploadService, itemCatService) {
 
     $controller('baseController', {$scope: $scope});//继承
 
@@ -94,7 +94,7 @@ app.controller('goodsController', function ($scope, $controller, goodsService, u
                 $scope.paginationConf.totalItems = response.total;//更新总记录数
             }
         );
-    }
+    };
 
     /**
      * 上传图片
@@ -117,12 +117,52 @@ app.controller('goodsController', function ($scope, $controller, goodsService, u
     //添加图片列表
     $scope.add_image_entity = function () {
         $scope.entity.goodsDesc.itemImages.push($scope.image_entity);
-    }
+    };
 
     //列表中移除图片
     $scope.remove_image_entity = function (index) {
         $scope.entity.goodsDesc.itemImages.splice(index, 1);
-    }
+    };
+
+    // 查询商品分类列表，第一级
+    $scope.selectItemCat1List = function () {
+        itemCatService.findByParentId(0).success(function (response) {
+            $scope.itemCat1List = response;
+        });
+    };
+
+    // 查询商品分类列表，第二级，根据category1Id的值的变化触发
+    $scope.$watch('entity.goods.category1Id', function (newValue, oldValue) {
+
+        //根据选择的值，查询二级分类
+        itemCatService.findByParentId(newValue).success(
+            function (response) {
+                $scope.itemCat2List = response;
+            }
+        );
+
+    });
+
+    // 查询商品分类列表，第三级，根据category2Id的值的变化触发
+    $scope.$watch('entity.goods.category2Id', function (newValue, oldValue) {
+        //根据选择的值，查询三级分类
+        itemCatService.findByParentId(newValue).success(
+            function (response) {
+                $scope.itemCat3List = response;
+            }
+        );
+    });
+
+    //三级分类选择后  读取模板ID
+    $scope.$watch('entity.goods.category3Id', function (newValue, oldValue) {
+        itemCatService.findOne(newValue).success(
+            function (response) {
+                $scope.entity.goods.typeTemplateId = response.typeId; //更新模板ID
+            }
+        );
+    });
+
+
 
 
 });	
