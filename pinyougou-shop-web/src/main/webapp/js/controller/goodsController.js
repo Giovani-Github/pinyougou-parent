@@ -112,7 +112,7 @@ app.controller('goodsController', function ($scope, $controller, goodsService, u
     };
 
     //定义页面实体结构
-    $scope.entity = {goods: {}, goodsDesc: {itemImages: []}};
+    $scope.entity = {goods: {}, goodsDesc: {itemImages: [], specificationItems: []}};
 
     //添加图片列表
     $scope.add_image_entity = function () {
@@ -171,7 +171,55 @@ app.controller('goodsController', function ($scope, $controller, goodsService, u
                 $scope.entity.goodsDesc.customAttributeItems = JSON.parse($scope.typeTemplate.customAttributeItems);//扩展属性
             }
         );
+
+        //查询规格列表
+        typeTemplateService.findSpecList(newValue).success(
+            function (response) {
+                $scope.specList = response;
+            }
+        );
     });
+
+    // 更新规格属性值
+    // 即：$scope.entity={ goodsDesc:{itemImages:[],specificationItems:[]}}
+    // 中的specificationItems，例子：
+    // [{"attributeName":"网络制式","attributeValue":["移动3G","移动4G"]},{"attributeName":"屏幕尺寸","attributeValue":["6寸","5.5寸"]}]
+    $scope.updateSpecAttribute = function ($event, name, value) {
+
+        // 获得{"attributeName":"网络制式","attributeValue":["移动3G","移动4G"]}
+        var object = $scope.searchObjectByKey($scope.entity.goodsDesc.specificationItems, 'attributeName', name);
+
+        if (object != null) {
+
+            // 如果找到了：{"attributeName":"网络制式","attributeValue":["移动3G","移动4G"]}
+            // 就判断他是否是勾选的
+            if ($event.target.checked) {
+
+                // 如果是勾选的
+                // 就往{"attributeName":"网络制式","attributeValue":["移动3G","移动4G"]}
+                // 里面的attributeValue属性，继续添加值
+                object.attributeValue.push(value);
+            } else {
+
+                // 如果是取消勾选
+                // 就将{"attributeName":"网络制式","attributeValue":["移动3G","移动4G"]}
+                // 里面的attributeValue属性中的，具体的某个值去除
+                object.attributeValue.splice(object.attributeValue.indexOf(value), 1);//移除选项
+
+                //如果选项都取消了，将此条记录移除
+                if (object.attributeValue.length == 0) {
+                    // 将[{"attributeName":"网络制式","attributeValue":[]},{"attributeName":"屏幕尺寸","attributeValue":["6寸","5.5寸"]}]
+                    // 里面的{"attributeName":"网络制式","attributeValue":[]}移除
+                    $scope.entity.goodsDesc.specificationItems.splice($scope.entity.goodsDesc.specificationItems.indexOf(object), 1);
+                }
+            }
+        } else {
+            // 如果中的specificationItems中没有所需查找的对象，如没有：{"attributeName":"网络制式","attributeValue":["移动3G","移动4G"]}
+            // 就新建一个：{"attributeName":"网络制式","attributeValue":["移动3G","移动4G"]}
+            $scope.entity.goodsDesc.specificationItems.push({"attributeName": name, "attributeValue": [value]});
+        }
+    }
+
 
 
 });

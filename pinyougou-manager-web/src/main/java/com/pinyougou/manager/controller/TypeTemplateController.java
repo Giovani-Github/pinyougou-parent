@@ -131,4 +131,5 @@ public class TypeTemplateController {
     public List<Map> selectOptionList() {
         return typeTemplateService.selectOptionList();
     }
+
 }

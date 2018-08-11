@@ -70,4 +70,15 @@ public interface TypeTemplateService {
      * @Date 2018/8/10 14:43
      */
     public List<Map> selectOptionList();
+
+    /**
+     * 返回规格列表
+     *
+     * @param
+     * @return java.util.List<java.util.Map>
+     * @Author Giovani
+     * @Date 2018/8/11 17:28
+     */
+    public List<Map> findSpecList(Long id);
+
 }
