@@ -64,6 +64,38 @@ public class GoodsServiceImpl implements GoodsService {
         goods.getGoodsDesc().setGoodsId(goods.getGoods().getId());
         goodsDescMapper.insert(goods.getGoodsDesc());//插入商品扩展数据
 
+        saveItemList(goods);//插入SKU商品数据
+    }
+
+
+    private void setItemValus(Goods goods, TbItem item) {
+        item.setGoodsId(goods.getGoods().getId());//商品SPU编号
+        item.setSellerId(goods.getGoods().getSellerId());//商家编号
+        item.setCategoryid(goods.getGoods().getCategory3Id());//商品分类编号（3级）
+        item.setCreateTime(new Date());//创建日期
+        item.setUpdateTime(new Date());//修改日期
+
+        //品牌名称
+        TbBrand brand = brandMapper.selectByPrimaryKey(goods.getGoods().getBrandId());
+        item.setBrand(brand.getName());
+        //分类名称
+        TbItemCat itemCat = itemCatMapper.selectByPrimaryKey(goods.getGoods().getCategory3Id());
+        item.setCategory(itemCat.getName());
+
+        //商家名称
+        TbSeller seller = sellerMapper.selectByPrimaryKey(goods.getGoods().getSellerId());
+        item.setSeller(seller.getNickName());
+
+        //图片地址（取spu的第一个图片）
+        List<Map> imageList = JSON.parseArray(goods.getGoodsDesc().getItemImages(), Map.class);
+        if (imageList.size() > 0) {
+            item.setImage((String) imageList.get(0).get("url"));
+        }
+    }
+
+    //插入sku列表数据
+    private void saveItemList(Goods goods) {
+
         // 启用规格
         if ("1".equals(goods.getGoods().getIsEnableSpec())) {
 
@@ -99,37 +131,23 @@ public class GoodsServiceImpl implements GoodsService {
         }
     }
 
-    private void setItemValus(Goods goods, TbItem item) {
-        item.setGoodsId(goods.getGoods().getId());//商品SPU编号
-        item.setSellerId(goods.getGoods().getSellerId());//商家编号
-        item.setCategoryid(goods.getGoods().getCategory3Id());//商品分类编号（3级）
-        item.setCreateTime(new Date());//创建日期
-        item.setUpdateTime(new Date());//修改日期
-
-        //品牌名称
-        TbBrand brand = brandMapper.selectByPrimaryKey(goods.getGoods().getBrandId());
-        item.setBrand(brand.getName());
-        //分类名称
-        TbItemCat itemCat = itemCatMapper.selectByPrimaryKey(goods.getGoods().getCategory3Id());
-        item.setCategory(itemCat.getName());
-
-        //商家名称
-        TbSeller seller = sellerMapper.selectByPrimaryKey(goods.getGoods().getSellerId());
-        item.setSeller(seller.getNickName());
-
-        //图片地址（取spu的第一个图片）
-        List<Map> imageList = JSON.parseArray(goods.getGoodsDesc().getItemImages(), Map.class);
-        if (imageList.size() > 0) {
-            item.setImage((String) imageList.get(0).get("url"));
-        }
-    }
-
     /**
      * 修改
      */
     @Override
-    public void update(TbGoods goods) {
-        goodsMapper.updateByPrimaryKey(goods);
+    public void update(Goods goods) {
+        
+        goods.getGoods().setAuditStatus("0");//设置未申请状态:如果是经过修改的商品，需要重新设置状态
+        goodsMapper.updateByPrimaryKey(goods.getGoods());//保存商品表
+        goodsDescMapper.updateByPrimaryKey(goods.getGoodsDesc());//保存商品扩展表
+        //删除原有的sku列表数据
+        TbItemExample example = new TbItemExample();
+        com.pinyougou.pojo.TbItemExample.Criteria criteria = example.createCriteria();
+        criteria.andGoodsIdEqualTo(goods.getGoods().getId());
+        itemMapper.deleteByExample(example);
+        //添加新的sku列表数据
+        saveItemList(goods);//插入商品SKU列表数据
+
     }
 
     /**
@@ -140,12 +158,20 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Goods findOne(Long id) {
-        
+
         Goods goods = new Goods();
         TbGoods tbGoods = goodsMapper.selectByPrimaryKey(id);
         goods.setGoods(tbGoods);
         TbGoodsDesc tbGoodsDesc = goodsDescMapper.selectByPrimaryKey(id);
         goods.setGoodsDesc(tbGoodsDesc);
+
+        //查询SKU商品列表
+        TbItemExample example = new TbItemExample();
+        com.pinyougou.pojo.TbItemExample.Criteria criteria = example.createCriteria();
+        criteria.andGoodsIdEqualTo(id);//查询条件：商品ID
+        List<TbItem> itemList = itemMapper.selectByExample(example);
+        goods.setItemList(itemList);
+
         return goods;
     }
 
