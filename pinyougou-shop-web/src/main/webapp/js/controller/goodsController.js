@@ -1,5 +1,6 @@
 //控制层
-app.controller('goodsController', function ($scope, $controller, goodsService, uploadService, itemCatService, typeTemplateService) {
+app.controller('goodsController', function ($scope, $controller, goodsService, uploadService, itemCatService, typeTemplateService, $location
+) {
 
     $controller('baseController', {$scope: $scope});//继承
 
@@ -24,9 +25,32 @@ app.controller('goodsController', function ($scope, $controller, goodsService, u
 
     //查询实体
     $scope.findOne = function (id) {
+
+        // 获取参数值
+        // $location可以获取另一个html页面传递过来的参数
+        var id = $location.search()['id'];
+
+        if (id == null) {
+            return;
+        }
+
         goodsService.findOne(id).success(
             function (response) {
                 $scope.entity = response;
+
+                // 向富文本编辑器添加商品介绍
+                editor.html($scope.entity.goodsDesc.introduction);
+
+                // 显示图片列表，由于后台传过来的数据都是字符串，所以需要转换成对象，页面才能读取到数据
+                $scope.entity.goodsDesc.itemImages = JSON.parse($scope.entity.goodsDesc.itemImages);
+                // 显示扩展属性
+                $scope.entity.goodsDesc.customAttributeItems = JSON.parse($scope.entity.goodsDesc.customAttributeItems);
+                // 规格
+                $scope.entity.goodsDesc.specificationItems = JSON.parse($scope.entity.goodsDesc.specificationItems);
+
+                // alert($scope.entity.goodsDesc.specificationItems.length);
+                // alert($scope.entity.goodsDesc.customAttributeItems.length);
+
             }
         );
     }
@@ -168,7 +192,13 @@ app.controller('goodsController', function ($scope, $controller, goodsService, u
             function (response) {
                 $scope.typeTemplate = response;//获取类型模板
                 $scope.typeTemplate.brandIds = JSON.parse($scope.typeTemplate.brandIds);//品牌列表
-                $scope.entity.goodsDesc.customAttributeItems = JSON.parse($scope.typeTemplate.customAttributeItems);//扩展属性
+
+                // 如果没有ID，则加载模板中的扩展数据
+                // 否则会与findOne中的代码冲突，当该页面是查询详情的时候，会覆盖findOne中的扩展属性，导致查询不出扩展属性值
+                if ($location.search()['id'] == null) {
+                    $scope.entity.goodsDesc.customAttributeItems = JSON.parse($scope.typeTemplate.customAttributeItems);//扩展属性
+                }
+
             }
         );
 
@@ -304,5 +334,22 @@ app.controller('goodsController', function ($scope, $controller, goodsService, u
         );
     }
 
+    // 根据规格名称和选项名称返回是否被勾选
+    $scope.checkAttributeValue = function (specName, optionName) {
+
+        var items = $scope.entity.goodsDesc.specificationItems;
+        // 使用之前定义的方法，从集合中按照key查询对象
+        var object = $scope.searchObjectByKey(items, 'attributeName', specName);
+
+        if (object == null) {
+            return false;
+        } else {
+            if (object.attributeValue.indexOf(optionName) >= 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 
 });

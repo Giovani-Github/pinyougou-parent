@@ -54,7 +54,9 @@ app.controller('baseController', function ($scope) {
     //从集合中按照key查询对象,数据格式：[{“attributeName”:”规格名称”,”attributeValue”:[“规格选项1”,“规格选项2”.... ]  } , ....  ]
     $scope.searchObjectByKey = function (list, key, keyValue) {
         for (var i = 0; i < list.length; i++) {
+
             if (list[i][key] == keyValue) {
+
                 return list[i];
             }
         }

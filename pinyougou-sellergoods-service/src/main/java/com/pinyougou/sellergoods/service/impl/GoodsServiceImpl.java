@@ -37,7 +37,6 @@ public class GoodsServiceImpl implements GoodsService {
     @Autowired
     private TbSellerMapper sellerMapper;
 
-
     /**
      * 查询全部
      */
@@ -125,7 +124,6 @@ public class GoodsServiceImpl implements GoodsService {
         }
     }
 
-
     /**
      * 修改
      */
@@ -141,8 +139,14 @@ public class GoodsServiceImpl implements GoodsService {
      * @return
      */
     @Override
-    public TbGoods findOne(Long id) {
-        return goodsMapper.selectByPrimaryKey(id);
+    public Goods findOne(Long id) {
+        
+        Goods goods = new Goods();
+        TbGoods tbGoods = goodsMapper.selectByPrimaryKey(id);
+        goods.setGoods(tbGoods);
+        TbGoodsDesc tbGoodsDesc = goodsDescMapper.selectByPrimaryKey(id);
+        goods.setGoodsDesc(tbGoodsDesc);
+        return goods;
     }
 
     /**

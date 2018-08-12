@@ -34,7 +34,7 @@
 </head>
 
 <body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="goodsController"
-      ng-init="selectItemCat1List()">
+      ng-init="selectItemCat1List();findOne()">
 
 <!-- 正文区域 -->
 <section class="content">
@@ -208,7 +208,7 @@
                     </div>
                     <p>
 
-                    <div>
+                    <div ng-if="entity.goods.isEnableSpec==1" class="row data-type">
 
                         <div class="row data-type">
 
@@ -217,7 +217,9 @@
                                 <div class="col-md-10 data">
 					                               
                                   <span ng-repeat="option in pojo.options">
-                                    <input ng-click="updateSpecAttribute($event,pojo.text,option.optionName);createItemList()"
+                                      <!-- ng-checked:true，flase，勾选和不勾选两个值 -->
+                                    <input ng-checked="checkAttributeValue(pojo.text,option.optionName)"
+                                           ng-click="updateSpecAttribute($event,pojo.text,option.optionName);createItemList()"
                                            type="checkbox">{{option.optionName}}
                                   </span>
 
@@ -227,16 +229,9 @@
 
                         </div>
 
-                        {{entity.goodsDesc.specificationItems}}
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        {{entity.itemList}}
-
                         <!--显示sku列表=-->
-                        <div ng-if="entity.goods.isEnableSpec==1" class="row data-type">
-                            <table class="table table-bordered table-striped table-hover dataTable">
+
+                        <table class="table table-bordered table-striped table-hover dataTable">
                                 <thead>
                                 <tr>
                                     <!--
@@ -285,7 +280,6 @@
                                 </tbody>
                             </table>
 
-                        </div>
 
                     </div>
                 </div>
