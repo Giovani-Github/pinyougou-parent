@@ -286,5 +286,23 @@ app.controller('goodsController', function ($scope, $controller, goodsService, u
         return newList;
     }
 
+    $scope.status = ['未审核', '已审核', '审核未通过', '关闭'];//商品状态
+
+    //商品分类列表
+    $scope.itemCatList = [];
+
+    //加载商品分类列表
+    $scope.findItemCatList = function () {
+        itemCatService.findAll().success(
+            function (response) {
+                for (var i = 0; i < response.length; i++) {
+                    // 因为我们需要根据分类ID得到分类名称
+                    // 所以我们将返回的分页结果以数组形式再次封装
+                    $scope.itemCatList[response[i].id] = response[i].name;
+                }
+            }
+        );
+    }
+
 
 });
