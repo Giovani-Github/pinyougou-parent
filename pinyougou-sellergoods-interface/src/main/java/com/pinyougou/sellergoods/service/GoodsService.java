@@ -61,4 +61,14 @@ public interface GoodsService {
      */
     public PageResult findPage(TbGoods goods, int pageNum, int pageSize);
 
+    /**
+     * 批量修改状态
+     *
+     * @param
+     * @return void
+     * @Author Giovani
+     * @Date 2018/8/12 16:52
+     */
+    public void updateStatus(Long[] ids, String status);
+
 }

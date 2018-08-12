@@ -11,6 +11,7 @@ import com.pinyougou.pojogroup.Goods;
 import com.pinyougou.sellergoods.service.GoodsService;
 import entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.Map;
  * @author Administrator
  */
 @Service
+@Transactional
 public class GoodsServiceImpl implements GoodsService {
 
     @Autowired
@@ -66,7 +68,6 @@ public class GoodsServiceImpl implements GoodsService {
 
         saveItemList(goods);//插入SKU商品数据
     }
-
 
     private void setItemValus(Goods goods, TbItem item) {
         item.setGoodsId(goods.getGoods().getId());//商品SPU编号
@@ -136,7 +137,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public void update(Goods goods) {
-        
+
         goods.getGoods().setAuditStatus("0");//设置未申请状态:如果是经过修改的商品，需要重新设置状态
         goodsMapper.updateByPrimaryKey(goods.getGoods());//保存商品表
         goodsDescMapper.updateByPrimaryKey(goods.getGoodsDesc());//保存商品扩展表
@@ -181,7 +182,9 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public void delete(Long[] ids) {
         for (Long id : ids) {
-            goodsMapper.deleteByPrimaryKey(id);
+            TbGoods goods = goodsMapper.selectByPrimaryKey(id);
+            goods.setIsDelete("1");
+            goodsMapper.updateByPrimaryKey(goods);
         }
     }
 
@@ -222,8 +225,20 @@ public class GoodsServiceImpl implements GoodsService {
 
         }
 
+        criteria.andIsDeleteIsNull();//非删除状态
+
         Page<TbGoods> page = (Page<TbGoods>) goodsMapper.selectByExample(example);
         return new PageResult(page.getTotal(), page.getResult());
+    }
+
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+        for (Long id : ids) {
+            TbGoods goods = goodsMapper.selectByPrimaryKey(id);
+            goods.setAuditStatus(status);
+            goodsMapper.updateByPrimaryKey(goods);
+        }
+
     }
 
 }
