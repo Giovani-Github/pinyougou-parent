@@ -36,7 +36,7 @@
 >
 > > **`pinyougou-coommon`** ：通用工具类模块，打包方式：`jar`
 > >
-> > 依赖：`fileupload` `fastDFS`
+> > 依赖：`fileupload` `fastDFS` `Redis`
 >
 > 
 >
