@@ -22,31 +22,39 @@
 
 ### 项目结构
 
-> **`pinyougou-parent`** ：父工程，管理依赖，定义项目所需依赖（未使用），各模块再根据实际情况进行实际使用，打包方式：pom
+> **`pinyougou-parent`** ：父工程，管理依赖，定义项目所需依赖（未使用），各模块再根据实际情况进行实际使用，打包方式：`pom`
 >
-> > **`pinyougou-pojo`**：通用实体类模块，打包方式：jar
+> > **`pinyougou-pojo`**：通用实体类模块，打包方式：`jar`
 >
 > 
 >
-> > **`pinyougou-dao`**：通用数据访问模块，打包方式：jar
+> > **`pinyougou-dao`**：通用数据访问模块，打包方式：`jar`
 > >
 > > 依赖：`mybatis` `pinyougou-pojo` `mysql-connector-java ` `druid`
 >
 > 
 >
-> > **`pinyougou-coommon`** ：通用工具类模块，打包方式：jar
+> > **`pinyougou-coommon`** ：通用工具类模块，打包方式：`jar`
 >
 > 
 >
-> > **`pinyougou-sellergoods-interface`**：商家商品服务接口模块 ，打包方式：jar
+> > **`pinyougou-sellergoods-interface`**：商家商品服务接口模块 ，打包方式：`jar`
+> >
+> > 依赖：`pinyougou-pojo`
+>
+> > **`pinyougou-content-interface`**：广告服务接口模块，打包方式：`jar`
 > >
 > > 依赖：`pinyougou-pojo`
 >
 > 
 >
-> > **`pinyougou-sellergoods-service`**：商家商品服务模块，打包方式：war，tomcat端口：`9001`
+> > **`pinyougou-sellergoods-service`**：商家商品服务模块，打包方式：`war`，tomcat端口：`9001`
 > >
 > > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-sellergoods-interface`
+>
+> > **`pinyougou-content-service`**：广告服务模块，打包方式：`war，tomcat端口：`9002`
+> >
+> > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-content-interface`
 >
 > 
 >
@@ -59,6 +67,8 @@
 > > **`pinyougou-shop-web`**：商家管理后台，打包方式：war，tomcat端口：`9102`
 > >
 > > 依赖：`spring` `springmvc` `dubbox` `pinyougou-common` `pinyougou-sellergoods-interface`
+>
+> 
 
 ### 错误总结：
 
