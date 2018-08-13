@@ -35,12 +35,16 @@
 > 
 >
 > > **`pinyougou-coommon`** ：通用工具类模块，打包方式：`jar`
+> >
+> > 依赖：`fileupload` `fastDFS`
 >
 > 
 >
 > > **`pinyougou-sellergoods-interface`**：商家商品服务接口模块 ，打包方式：`jar`
 > >
 > > 依赖：`pinyougou-pojo`
+>
+> 
 >
 > > **`pinyougou-content-interface`**：广告服务接口模块，打包方式：`jar`
 > >
@@ -52,21 +56,29 @@
 > >
 > > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-sellergoods-interface`
 >
-> > **`pinyougou-content-service`**：广告服务模块，打包方式：`war，tomcat端口：`9002`
+> 
+>
+> > **`pinyougou-content-service`**：广告服务模块，打包方式：`war`，tomcat端口：	 `9002`
 > >
 > > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-content-interface`
 >
 > 
 >
-> > **`pinyougou-manager-web`**：运营商管理后台，打包方式：war，tomcat端口：`9101`
+> > **`pinyougou-manager-web`**：运营商管理后台，打包方式：`war`，tomcat端口：`9101`
 > >
-> > 依赖：`spring`  `springmvc`  `dubbox` `pinyougou-common` `pinyougou-sellergoods-interface`
+> > 依赖：`spring`  `springmvc`  `dubbox` `pinyougou-common` `pinyougou-sellergoods-interface` `SpringSecurity `
 >
 > 
 >
-> > **`pinyougou-shop-web`**：商家管理后台，打包方式：war，tomcat端口：`9102`
+> > **`pinyougou-shop-web`**：商家管理后台，打包方式：`war`，tomcat端口：`9102`
 > >
-> > 依赖：`spring` `springmvc` `dubbox` `pinyougou-common` `pinyougou-sellergoods-interface`
+> > 依赖：`spring` `springmvc` `dubbox` `pinyougou-common` `pinyougou-sellergoods-interface` `SpringSecurity `
+>
+> 
+>
+> >> **`pinyougou-portal-web`**：商家管理后台，打包方式：`war`，tomcat端口：`9103`
+> >>
+> >> 依赖：`spring` `springmvc` `dubbox` `pinyougou-common` `pinyougou-content-interface`
 >
 > 
 

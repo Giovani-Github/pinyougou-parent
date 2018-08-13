@@ -60,4 +60,13 @@ public interface ContentService {
      */
     public PageResult findPage(TbContent content, int pageNum, int pageSize);
 
+    /**
+     * 根据广告类型id查询广告列表
+     *
+     * @param
+     * @return java.util.List<com.pinyougou.pojo.TbContent>
+     * @Author Giovani
+     * @Date 2018/8/13 15:30
+     */
+    public List<TbContent> findByCategoryId(Long categoryId);
 }
