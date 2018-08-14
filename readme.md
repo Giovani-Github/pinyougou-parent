@@ -9,7 +9,6 @@
 **项目使用的架构是**：
 
 * 分布式
-
 * SOA
 
 **所用技术**：
@@ -18,6 +17,12 @@
  *  zookeeper
  *  dobbox
  *  AngularJs
+ *  Redis
+*  Spring Data Redis
+ *  spring security
+ *  fastDFS
+ *  Solr
+ *  spring-data-solr
  *  待补充
 
 ### 项目结构
@@ -25,6 +30,8 @@
 > **`pinyougou-parent`** ：父工程，管理依赖，定义项目所需依赖（未使用），各模块再根据实际情况进行实际使用，打包方式：`pom`
 >
 > > **`pinyougou-pojo`**：通用实体类模块，打包方式：`jar`
+> >
+> > 依赖：`spring-data-solr`
 >
 > 
 >
@@ -37,6 +44,12 @@
 > > **`pinyougou-coommon`** ：通用工具类模块，打包方式：`jar`
 > >
 > > 依赖：`fileupload` `fastDFS` `Redis`
+>
+> 
+>
+> > **`pinyougou-solr-util`** ：品优购-批量数据导入solr，打包方式：`jar`
+> >
+> > 依赖：`pinyougou-dao` `spring`
 >
 > 
 >
@@ -76,9 +89,9 @@
 >
 > 
 >
-> >> **`pinyougou-portal-web`**：商家管理后台，打包方式：`war`，tomcat端口：`9103`
-> >>
-> >> 依赖：`spring` `springmvc` `dubbox` `pinyougou-common` `pinyougou-content-interface`
+> >**`pinyougou-portal-web`**：商城，打包方式：`war`，tomcat端口：`9103`
+> >
+> >依赖：`spring` `springmvc` `dubbox` `pinyougou-common` `pinyougou-content-interface`
 >
 > 
 
