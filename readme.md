@@ -1,4 +1,6 @@
-## 品优购商城项目
+##  
+
+品优购商城项目
 
 ### 项目简介
 
@@ -65,6 +67,12 @@
 >
 > 
 >
+> > **`pinyougou-search-interface`**：搜索服务接口模块，打包方式：`jar`
+> >
+> > 依赖：`pinyougou-pojo`
+>
+> 
+>
 > > **`pinyougou-sellergoods-service`**：商家商品服务模块，打包方式：`war`，tomcat端口：`9001`
 > >
 > > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-sellergoods-interface`
@@ -74,6 +82,12 @@
 > > **`pinyougou-content-service`**：广告服务模块，打包方式：`war`，tomcat端口：	 `9002`
 > >
 > > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-content-interface`
+>
+> 
+>
+> > **`pinyougou-search-service`**：搜索服务模块，打包方式：`war`，tomcat端口：	 `9004`
+> >
+> > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-search-interface`
 >
 > 
 >
@@ -94,6 +108,12 @@
 > >依赖：`spring` `springmvc` `dubbox` `pinyougou-common` `pinyougou-content-interface`
 >
 > 
+>
+> > **`pinyougou-search-web`**：搜索web项目，打包方式：`war`，tomcat端口：`9104`
+> >
+> > 依赖：`spring` `springmvc` `dubbox` `pinyougou-common` `pinyougou-search-interface`
+
+
 
 ### 错误总结：
 
@@ -204,4 +224,59 @@
 
     ​	跑这个异常说明注入内容有问题，遇到类似异常，检查注入内容是否正确！！ `controller`与service之间的注入有问题
 
-12. 
+12. `dobbox服务提供者` 注册不上，但有没有报错误信息
+
+    > 加入log4j，查看控制台输出信息
+    >
+    > 如没有一下相关信息输出，表明没有服务没有成功注册上。打开`doboox-admin服务管理`，发现没有注册上
+
+    ```
+    18:13:09,209  INFO ZkEventThread:64 - Starting ZkClient event thread.
+    18:13:18,238  INFO ZooKeeper:100 - Client environment:zookeeper.version=3.4.7-1713338, built on 11/09/2015 04:32 GMT
+    18:13:18,239  INFO ZooKeeper:100 - Client environment:host.name=Giovani-Home
+    18:13:18,240  INFO ZooKeeper:100 - Client environment:java.version=1.8.0_161
+    18:13:18,240  INFO ZooKeeper:100 - Client environment:java.vendor=Oracle Corporation
+    18:13:18,241  INFO ZooKeeper:100 - Client environment:java.home=F:\giovani-applicaion\jdk1.8.0_161\jre
+    18:13:18,241  INFO ZooKeeper:100 - Client environment:java.class.path=F:\giovani-applicaion\apache-maven-3.3.9\boot\plexus-classworlds-2.5.2.jar;F:\giovani-applicaion\IntelliJ IDEA 2018.1\lib\idea_rt.jar;C:\Users\Administrator\.IntelliJIdea2018.1\system\captureAgent\debugger-agent.jar
+    18:13:18,242  INFO ZooKeeper:100 - Client environment:java.library.path=F:\giovani-applicaion\jdk1.8.0_161\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;F:\giovani-applicaion\MySQL\MySQL Server 5.5\bin;F:\giovani-applicaion\jdk1.8.0_161\bin;C:\WINDOWS\System32\OpenSSH\;F:\giovani-applicaion\apache-maven-3.3.9\bin;C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps;;.
+    18:13:18,243  INFO ZooKeeper:100 - Client environment:java.io.tmpdir=C:\Users\ADMINI~1\AppData\Local\Temp\
+    18:13:18,243  INFO ZooKeeper:100 - Client environment:java.compiler=<NA>
+    18:13:18,244  INFO ZooKeeper:100 - Client environment:os.name=Windows 10
+    18:13:18,244  INFO ZooKeeper:100 - Client environment:os.arch=amd64
+    18:13:18,245  INFO ZooKeeper:100 - Client environment:os.version=10.0
+    18:13:18,245  INFO ZooKeeper:100 - Client environment:user.name=Giovani
+    18:13:18,246  INFO ZooKeeper:100 - Client environment:user.home=C:\Users\Administrator
+    18:13:18,246  INFO ZooKeeper:100 - Client environment:user.dir=E:\IdeaProjects\pinyougou-parent\pinyougou-search-service
+    ```
+
+    
+
+    > 原因：
+    >
+    > 服务原本是这样写的：`com.pinyougou.search.service.impl.ItemSearchServiceImpl`
+    >
+    > ```
+    > @Service(timeout = 5000)
+    > public class ItemSearchServiceImpl implements ItemSearchService {
+    > ```
+    >
+    > 配置文件：`applicationContext-service.xml`
+    >
+    > ```
+    > <dubbo:protocol name="dubbo" port="20884"></dubbo:protocol>
+    > ```
+    >
+    > 更改了一下；
+    >
+    > ```
+    > @Service(timeout = 3000)
+    > public class ItemSearchServiceImpl implements ItemSearchService {
+    > ```
+    >
+    > ```
+    > <dubbo:protocol name="dubbo" port="20887"></dubbo:protocol>
+    > ```
+    >
+    > 问题就解决了，重新改回，问题就没发生了。
+    >
+    > 费解，费解.....
