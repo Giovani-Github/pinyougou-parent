@@ -53,9 +53,6 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
         PageHelper.startPage(pageNum, pageSize);
         Page<TbTypeTemplate> page = (Page<TbTypeTemplate>) typeTemplateMapper.selectByExample(null);
 
-        //存入数据到缓存
-        saveToRedis();
-
         return new PageResult(page.getTotal(), page.getResult());
     }
 
@@ -118,6 +115,9 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
             }
 
         }
+
+        //存入数据到缓存
+        saveToRedis();
 
         Page<TbTypeTemplate> page = (Page<TbTypeTemplate>) typeTemplateMapper.selectByExample(example);
         return new PageResult(page.getTotal(), page.getResult());
