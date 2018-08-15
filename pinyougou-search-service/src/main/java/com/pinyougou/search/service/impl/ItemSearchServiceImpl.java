@@ -6,9 +6,11 @@ import com.pinyougou.search.service.ItemSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.Criteria;
-import org.springframework.data.solr.core.query.Query;
-import org.springframework.data.solr.core.query.SimpleQuery;
-import org.springframework.data.solr.core.query.result.ScoredPage;
+import org.springframework.data.solr.core.query.HighlightOptions;
+import org.springframework.data.solr.core.query.HighlightQuery;
+import org.springframework.data.solr.core.query.SimpleHighlightQuery;
+import org.springframework.data.solr.core.query.result.HighlightEntry;
+import org.springframework.data.solr.core.query.result.HighlightPage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,14 +25,36 @@ public class ItemSearchServiceImpl implements ItemSearchService {
     private SolrTemplate solrTemplate;
 
     @Override
-    public Map search(Map searchMap) {
+    public Map<String, Object> search(Map searchMap) {
+        Map<String, Object> map = new HashMap<>();
 
+        //1.查询列表
+        map.putAll(searchList(searchMap));
+        
+        return map;
+    }
+
+    /**
+     * 根据关键字从solr中搜索item（sku）列表
+     *
+     * @param
+     * @return java.util.Map
+     * @Author Giovani
+     * @Date 2018/8/15 14:12
+     */
+    private Map searchList(Map searchMap) {
         Map map = new HashMap();
 
-        Query query = new SimpleQuery("*:*");
+        // 高亮条件设置
+        HighlightQuery query = new SimpleHighlightQuery();
+        HighlightOptions highlightOptions = new HighlightOptions().addField("item_title");//设置高亮的域
+        highlightOptions.setSimplePrefix("<em style='color:red'>");//高亮前缀
+        highlightOptions.setSimplePostfix("</em>");//高亮后缀
+        query.setHighlightOptions(highlightOptions);//设置高亮选项
 
         /**
-         * 前端接收的json格式{keywords:""}
+         * 按照关键字查询
+         *
          * 搜索的时候有可能是根据商品名称，或者品牌名称等等。
          * 这时候偶，把所有字段都配置到复制域里，那么就方便了，只需要通过配置到的复制域名称item_keywords
          * 进行搜索，就可以匹配所有配置好的字段
@@ -41,11 +65,15 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         Criteria criteria = new Criteria("item_keywords").is(searchMap.get("keywords"));
         query.addCriteria(criteria);
 
-        ScoredPage<TbItem> page = solrTemplate.queryForPage(query, TbItem.class);
-
-        // 转换为json是：{row: "sku列表"}
+        // 通过关键字搜索出高亮列表，设置高亮
+        HighlightPage<TbItem> page = solrTemplate.queryForHighlightPage(query, TbItem.class);
+        for (HighlightEntry<TbItem> h : page.getHighlighted()) {//循环高亮入口集合
+            TbItem item = h.getEntity();//获取原实体类
+            if (h.getHighlights().size() > 0 && h.getHighlights().get(0).getSnipplets().size() > 0) {
+                item.setTitle(h.getHighlights().get(0).getSnipplets().get(0));//设置高亮的结果
+            }
+        }
         map.put("rows", page.getContent());
-
         return map;
     }
 
