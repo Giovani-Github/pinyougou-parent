@@ -38,10 +38,14 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         map.put("categoryList", categoryList);
 
         //3.查询品牌和规格列表
-        if (categoryList.size() > 0) {
-            map.putAll(searchBrandAndSpecList((String) categoryList.get(0)));
+        String categoryName = (String) searchMap.get("category");
+        if (!"".equals(categoryName)) {//如果有分类名称
+            map.putAll(searchBrandAndSpecList(categoryName));
+        } else {//如果没有分类名称，按照第一个查询
+            if (categoryList.size() > 0) {
+                map.putAll(searchBrandAndSpecList((String) categoryList.get(0)));
+            }
         }
-
 
         return map;
     }
@@ -65,7 +69,7 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         query.setHighlightOptions(highlightOptions);//设置高亮选项
 
         /**
-         * 按照关键字查询
+         * 1.1 按照关键字查询
          *
          * 搜索的时候有可能是根据商品名称，或者品牌名称等等。
          * 这时候偶，把所有字段都配置到复制域里，那么就方便了，只需要通过配置到的复制域名称item_keywords
@@ -76,6 +80,30 @@ public class ItemSearchServiceImpl implements ItemSearchService {
          */
         Criteria criteria = new Criteria("item_keywords").is(searchMap.get("keywords"));
         query.addCriteria(criteria);
+
+        // 1.2 按分类筛选
+        if (!"".equals(searchMap.get("category"))) {
+            Criteria filterCriteria = new Criteria("item_category").is(searchMap.get("category"));
+            FilterQuery filterQuery = new SimpleFilterQuery(filterCriteria);
+            query.addFilterQuery(filterQuery);
+        }
+
+        //1.3按品牌筛选
+        if (!"".equals(searchMap.get("brand"))) {
+            Criteria filterCriteria = new Criteria("item_brand").is(searchMap.get("brand"));
+            FilterQuery filterQuery = new SimpleFilterQuery(filterCriteria);
+            query.addFilterQuery(filterQuery);
+        }
+
+        //1.4过滤规格
+        if (searchMap.get("spec") != null) {
+            Map<String, String> specMap = (Map) searchMap.get("spec");
+            for (String key : specMap.keySet()) {
+                Criteria filterCriteria = new Criteria("item_spec_" + key).is(specMap.get(key));
+                FilterQuery filterQuery = new SimpleFilterQuery(filterCriteria);
+                query.addFilterQuery(filterQuery);
+            }
+        }
 
         // 通过关键字搜索出高亮列表，设置高亮
         HighlightPage<TbItem> page = solrTemplate.queryForHighlightPage(query, TbItem.class);
