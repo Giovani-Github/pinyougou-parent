@@ -105,6 +105,22 @@ public class ItemSearchServiceImpl implements ItemSearchService {
             }
         }
 
+        //1.5按价格筛选.....
+        if (!"".equals(searchMap.get("price"))) {
+            String[] price = ((String) searchMap.get("price")).split("-");
+            if (!price[0].equals("0")) {//如果区间起点不等于0
+                Criteria filterCriteria = new Criteria("item_price").greaterThanEqual(price[0]); // 取价格大于等于price[0]的
+                FilterQuery filterQuery = new SimpleFilterQuery(filterCriteria);
+                query.addFilterQuery(filterQuery);
+            }
+            if (!price[1].equals("*")) {//如果区间终点不等于*
+                Criteria filterCriteria = new Criteria("item_price").lessThanEqual(price[1]); // 取价格小与等于price[1]的
+                FilterQuery filterQuery = new SimpleFilterQuery(filterCriteria);
+                query.addFilterQuery(filterQuery);
+            }
+        }
+
+
         // 通过关键字搜索出高亮列表，设置高亮
         HighlightPage<TbItem> page = solrTemplate.queryForHighlightPage(query, TbItem.class);
         for (HighlightEntry<TbItem> h : page.getHighlighted()) {//循环高亮入口集合
