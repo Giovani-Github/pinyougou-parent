@@ -20,7 +20,9 @@ app.controller('searchController', function ($scope, searchService) {
         'spec': {},
         'price': '',
         'pageNo': 1,
-        'pageSize': 40
+        'pageSize': 40,
+        'sortField': '',
+        'sort': ''
     };
 
     //添加搜索项
@@ -102,6 +104,13 @@ app.controller('searchController', function ($scope, searchService) {
         } else {
             return false;
         }
+    }
+
+    //设置排序规则
+    $scope.sortSearch = function (sortField, sort) {
+        $scope.searchMap.sortField = sortField;
+        $scope.searchMap.sort = sort;
+        $scope.search();
     }
 
 
