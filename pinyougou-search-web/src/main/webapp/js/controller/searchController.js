@@ -1,4 +1,4 @@
-app.controller('searchController', function ($scope, searchService) {
+app.controller('searchController', function ($scope, $location, searchService) {
     //搜索
     $scope.search = function () {
         // 转换为int类型，否则提交到后端有可能变成字符串
@@ -123,6 +123,11 @@ app.controller('searchController', function ($scope, searchService) {
         return false;
     }
 
+    //加载查询字符串
+    $scope.loadkeywords = function () {
+        $scope.searchMap.keywords = $location.search()['keywords'];
+        $scope.search();
+    }
 
 
 });

@@ -96,6 +96,7 @@ app.controller('contentController', function ($scope, $controller, contentServic
 
     //加载广告分类列表
     $scope.findContentCategoryList = function () {
+        // alert("加载广告列表")
         contentCategoryService.findAll().success(
             function (response) {
                 $scope.contentCategoryList = response;

@@ -81,7 +81,7 @@
         因为没有com.pinyougou.service配置到dobbox的注解扫描中，所以需要手动注入
     -->
     <dubbo:application name="pinyougou-shop-web"/>
-    <dubbo:registry address="zookeeper://192.168.25.135:2181"/>
+    <dubbo:registry address="zookeeper://192.168.25.137:2181"/>
     <dubbo:reference id="sellerService" interface="com.pinyougou.sellergoods.service.SellerService">
     </dubbo:reference>
 
