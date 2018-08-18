@@ -99,7 +99,7 @@
 >
 > > **`pinyougou-shop-web`**：商家管理后台，打包方式：`war`，tomcat端口：`9102`
 > >
-> > 依赖：`spring` `springmvc` `dubbox` `pinyougou-common` `pinyougou-sellergoods-interface` `SpringSecurity `
+> > 依赖：`spring` `springmvc` `dubbox` `pinyougou-common` `pinyougou-sellergoods-interface` `SpringSecurity ` `pinyougou-search-interface` `pinyougou-content-interface`
 >
 > 
 >
@@ -220,9 +220,9 @@
 
 10. 注意，要先启动服务层项目，避免控制层项目找不到服务层相关代码
 
-11. `angularJS1` 异常`Error: [$injector:unpr]`：
+11. `angularJS1` 异常`Error: [$injector:unpr]` 和 `Error: [ng:areq]`：
 
-    ​	跑这个异常说明注入内容有问题，遇到类似异常，检查注入内容是否正确！！ `controller`与service之间的注入有问题
+    ​	跑这个异常说明注入内容有问题，遇到类似异常，检查注入内容是否正确！！ `controller`与`service`之间的注入有问题。检查文件导入是否有问题
 
 12. `dobbox服务提供者` 注册不上，但有没有报错误信息
 
@@ -280,3 +280,5 @@
     > 问题就解决了，重新改回，问题就没发生了。
     >
     > 费解，费解.....
+
+13. 
