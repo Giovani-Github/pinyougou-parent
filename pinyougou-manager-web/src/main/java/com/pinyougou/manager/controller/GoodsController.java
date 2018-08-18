@@ -1,6 +1,7 @@
 package com.pinyougou.manager.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.pinyougou.page.service.ItemPageService;
 import com.pinyougou.pojo.TbGoods;
 import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojogroup.Goods;
@@ -28,7 +29,8 @@ public class GoodsController {
     private GoodsService goodsService;
     @Reference
     private ItemSearchService itemSearchService;
-
+    @Reference
+    private ItemPageService itemPageService;
 
     /**
      * 返回全部列表
@@ -160,5 +162,16 @@ public class GoodsController {
             return new Result(false, "失败");
         }
     }
+
+    /**
+     * freemarker生成商品详情静态页（测试）
+     *
+     * @param goodsId
+     */
+    @RequestMapping("/genHtml")
+    public void genHtml(Long goodsId) {
+        itemPageService.genItemHtml(goodsId);
+    }
+
 
 }

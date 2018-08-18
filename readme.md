@@ -25,6 +25,7 @@
  *  fastDFS
  *  Solr
  *  spring-data-solr
+ *  freemarker（网页静态化）
  *  待补充
 
 ### 项目结构
@@ -73,33 +74,45 @@
 >
 > 
 >
-> > **`pinyougou-sellergoods-service`**：商家商品服务模块，打包方式：`war`，tomcat端口：`9001`
+> > **`pinyougou-page-interface`**：网页静态化生成服务接口模块，打包方式：`jar`
+> >
+> > 依赖：`pinyougou-pojo`
+>
+> 
+>
+> > **`pinyougou-sellergoods-service`**：商家商品服务模块，打包方式：`war`，tomcat端口：`9001`，dubbo协议在哪个端口暴露服务: `20881`
 > >
 > > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-sellergoods-interface`
 >
 > 
 >
-> > **`pinyougou-content-service`**：广告服务模块，打包方式：`war`，tomcat端口：	 `9002`
+> > **`pinyougou-content-service`**：广告服务模块，打包方式：`war`，tomcat端口：	 `9002`，dubbo协议在哪个端口暴露服务: `20882`
 > >
 > > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-content-interface`
 >
 > 
 >
-> > **`pinyougou-search-service`**：搜索服务模块，打包方式：`war`，tomcat端口：	 `9004`
+> > **`pinyougou-search-service`**：搜索服务模块，打包方式：`war`，tomcat端口：	 `9004`，dubbo协议在哪个端口暴露服务: `20884`
 > >
 > > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-search-interface`
 >
 > 
 >
+> > **`pinyougou-page-service`**：搜索服务模块，打包方式：`war`，tomcat端口：	 `9005`，dubbo协议在哪个端口暴露服务: `20885`
+> >
+> > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-page-interface` `freemarker`
+>
+> 
+>
 > > **`pinyougou-manager-web`**：运营商管理后台，打包方式：`war`，tomcat端口：`9101`
 > >
-> > 依赖：`spring`  `springmvc`  `dubbox` `pinyougou-common` `pinyougou-sellergoods-interface` `SpringSecurity `
+> > 依赖：`spring`  `springmvc`  `dubbox` `pinyougou-common` `pinyougou-sellergoods-interface` `SpringSecurity ` `pinyougou-search-interface` `pinyougou-content-interface` `pinyougou-page-interface`
 >
 > 
 >
 > > **`pinyougou-shop-web`**：商家管理后台，打包方式：`war`，tomcat端口：`9102`
 > >
-> > 依赖：`spring` `springmvc` `dubbox` `pinyougou-common` `pinyougou-sellergoods-interface` `SpringSecurity ` `pinyougou-search-interface` `pinyougou-content-interface`
+> > 依赖：`spring` `springmvc` `dubbox` `pinyougou-common` `pinyougou-sellergoods-interface` `SpringSecurity ` 
 >
 > 
 >
@@ -251,7 +264,7 @@
 
     
 
-    > 原因：
+    > 原因1：
     >
     > 服务原本是这样写的：`com.pinyougou.search.service.impl.ItemSearchServiceImpl`
     >
@@ -280,5 +293,7 @@
     > 问题就解决了，重新改回，问题就没发生了。
     >
     > 费解，费解.....
+    >
+    > 原因2：`service`没加`com.alibaba.dubbo.config.annotation.Service`注解
 
 13. 
