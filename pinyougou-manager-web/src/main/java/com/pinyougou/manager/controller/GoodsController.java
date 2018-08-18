@@ -156,6 +156,11 @@ public class GoodsController {
                 }
             }
 
+            //静态页生成
+            for (Long goodsId : ids) {
+                itemPageService.genItemHtml(goodsId);
+            }
+            
             return new Result(true, "成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -172,6 +177,5 @@ public class GoodsController {
     public void genHtml(Long goodsId) {
         itemPageService.genItemHtml(goodsId);
     }
-
 
 }

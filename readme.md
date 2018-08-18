@@ -98,7 +98,7 @@
 >
 > 
 >
-> > **`pinyougou-page-service`**：搜索服务模块，打包方式：`war`，tomcat端口：	 `9005`，dubbo协议在哪个端口暴露服务: `20885`
+> > **`pinyougou-page-service`**：网页静态化生成服务模块，打包方式：`war`，tomcat端口：	 `9005`，dubbo协议在哪个端口暴露服务: `20885`
 > >
 > > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-page-interface` `freemarker`
 >
@@ -125,6 +125,12 @@
 > > **`pinyougou-search-web`**：搜索web项目，打包方式：`war`，tomcat端口：`9104`
 > >
 > > 依赖：`spring` `springmvc` `dubbox` `pinyougou-common` `pinyougou-search-interface`
+>
+> 
+>
+> > **`pinyougou-page-web`**：商品详情页web项目，打包方式：`war`，tomcat端口：`9105`
+> >
+> > 依赖：`spring` `springmvc` `dubbox` `pinyougou-common` `pinyougou-page-interface`
 
 
 
