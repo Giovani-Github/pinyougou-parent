@@ -38,73 +38,73 @@
 > >
 > > 依赖：`spring-data-solr`
 >
-> 
+>
 >
 > > **`pinyougou-dao`**：通用数据访问模块，打包方式：`jar`
 > >
 > > 依赖：`mybatis` `pinyougou-pojo` `mysql-connector-java ` `druid`
 >
-> 
+>
 >
 > > **`pinyougou-coommon`** ：通用工具类模块，打包方式：`jar`
 > >
 > > 依赖：`fileupload` `fastDFS` `Redis`
 >
-> 
+>
 >
 > > **`pinyougou-solr-util`** ：品优购-批量数据导入solr，打包方式：`jar`
 > >
 > > 依赖：`pinyougou-dao` `spring`
 >
-> 
+>
 >
 > > **`pinyougou-sellergoods-interface`**：商家商品服务接口模块 ，打包方式：`jar`
 > >
 > > 依赖：`pinyougou-pojo`
 >
-> 
+>
 >
 > > **`pinyougou-content-interface`**：广告服务接口模块，打包方式：`jar`
 > >
 > > 依赖：`pinyougou-pojo`
 >
-> 
+>
 >
 > > **`pinyougou-search-interface`**：搜索服务接口模块，打包方式：`jar`
 > >
 > > 依赖：`pinyougou-pojo`
 >
-> 
+>
 >
 > > **`pinyougou-page-interface`**：网页静态化生成服务接口模块，打包方式：`jar`
 > >
 > > 依赖：`pinyougou-pojo`
 >
-> 
+>
 >
 > > **`pinyougou-sellergoods-service`**：商家商品服务模块，打包方式：`war`，tomcat端口：`9001`，dubbo协议在哪个端口暴露服务: `20881`
 > >
 > > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-sellergoods-interface`
 >
-> 
+>
 >
 > > **`pinyougou-content-service`**：广告服务模块，打包方式：`war`，tomcat端口：	 `9002`，dubbo协议在哪个端口暴露服务: `20882`
 > >
 > > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-content-interface`
 >
-> 
+>
 >
 > > **`pinyougou-search-service`**：搜索服务模块，打包方式：`war`，tomcat端口：	 `9004`，dubbo协议在哪个端口暴露服务: `20884`
 > >
 > > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-search-interface`
 >
-> 
+>
 >
 > > **`pinyougou-page-service`**：网页静态化生成服务模块，打包方式：`war`，tomcat端口：	 `9005`，dubbo协议在哪个端口暴露服务: `20885`
 > >
 > > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-page-interface` `freemarker`
 >
-> 
+>
 >
 > > **`pinyougou-manager-web`**：运营商管理后台，打包方式：`war`，tomcat端口：`9101`
 > >
@@ -112,25 +112,27 @@
 > >
 > > 使用消息中间件，进行管理：`pinyougou-search-interface` `pinyougou-page-interface`
 >
-> 
+>
 >
 > > **`pinyougou-shop-web`**：商家管理后台，打包方式：`war`，tomcat端口：`9102`
 > >
 > > 依赖：`spring` `springmvc` `dubbox` `pinyougou-common` `pinyougou-sellergoods-interface` `SpringSecurity ` 
 >
-> 
+>
 >
 > >**`pinyougou-portal-web`**：商城首页，打包方式：`war`，tomcat端口：`9103`
 > >
 > >依赖：`spring` `springmvc` `dubbox` `pinyougou-common` `pinyougou-content-interface`
 >
-> 
+>
 >
 > > **`pinyougou-search-web`**：搜索web项目，打包方式：`war`，tomcat端口：`9104`
 > >
-> > 依赖：`spring` `springmvc` `dubbox` `pinyougou-common` `pinyougou-search-interface ` `activemq-client`
+> > 依赖：`spring` `springmvc`    ~~dubbox~~    `pinyougou-common` `pinyougou-search-interface ` `activemq-client`
+> >
+> > 不用dubbox，使用activeMQ，与其他模块进行交互
 >
-> 
+>
 >
 > > **`pinyougou-page-web`**：商品详情页web项目，打包方式：`war`，tomcat端口：`9105`
 > >

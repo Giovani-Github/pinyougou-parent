@@ -31,4 +31,9 @@
         <constructor-arg value="pinyougou_queue_solr"/>
     </bean>
 
+    <!--这个是队列目的地，点对点-->
+    <bean id="queueSolrDeleteDestination" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg value="pinyougou_queue_solr_delete"/>
+    </bean>
+
 </beans>

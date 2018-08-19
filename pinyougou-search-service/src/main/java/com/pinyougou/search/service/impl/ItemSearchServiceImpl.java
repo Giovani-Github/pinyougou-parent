@@ -1,6 +1,5 @@
 package com.pinyougou.search.service.impl;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.pinyougou.pojo.TbItem;
 import com.pinyougou.search.service.ItemSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.*;
 import org.springframework.data.solr.core.query.result.*;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +19,7 @@ import java.util.Map;
 // 由于solrTemplate 是另一个web应用程序中提供的，需要访问另一个应用程序，所以可能会导致时间比较长
 // 加timeout是防止服务消费者在调用本提供者的时候，因为本提供者需要访问另一个应用程序时间会长一点
 // 服务消费者在调用本提供者的时候，时间超过三秒，就报超时
-@Service(timeout = 5000)
+@Service
 public class ItemSearchServiceImpl implements ItemSearchService {
 
     @Autowired

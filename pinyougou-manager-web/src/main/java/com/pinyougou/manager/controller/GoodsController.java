@@ -40,8 +40,10 @@ public class GoodsController {
     @Autowired
     private Destination queueSolrDestination;//用于发送solr导入的消息
     @Autowired
-    private JmsTemplate jmsTemplate;
+    private Destination queueSolrDeleteDestination;//用户在索引库中删除记录
 
+    @Autowired
+    private JmsTemplate jmsTemplate;
 
     /**
      * 返回全部列表
@@ -116,12 +118,21 @@ public class GoodsController {
      * @return
      */
     @RequestMapping("/delete")
-    public Result delete(Long[] ids) {
+    public Result delete(final Long[] ids) {
         try {
             goodsService.delete(ids);
 
             // 更新solr索引，删除无用数据
             //            itemSearchService.deleteByGoodsIds(Arrays.asList(ids));
+
+            // 更新solr索引，删除无用数据，通过activeMQ，发送删除消息
+            jmsTemplate.send(queueSolrDeleteDestination, new MessageCreator() {
+                @Override
+                public Message createMessage(Session session) throws JMSException {
+                    return session.createObjectMessage(ids);
+                }
+            });
+
 
             return new Result(true, "删除成功");
         } catch (Exception e) {
@@ -160,7 +171,7 @@ public class GoodsController {
             if (status.equals("1")) {//审核通过
                 List<TbItem> itemList = goodsService.findItemListByGoodsIdandStatus(ids, status);
                 //调用搜索接口实现数据批量导入
-                //                if (itemList.size() > 0) {
+                if (itemList.size() > 0) {
                 //                    itemSearchService.importList(itemList);
 
                 // 调用搜索接口实现数据批量导入，使用activeMQ
@@ -172,9 +183,9 @@ public class GoodsController {
                     }
                 });
 
-                //                } else {
-                //                    System.out.println("没有明细数据");
-                //                }
+                } else {
+                    System.out.println("没有明细数据");
+                }
             }
 
             //静态页生成
