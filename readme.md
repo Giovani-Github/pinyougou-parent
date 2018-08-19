@@ -16,16 +16,18 @@
 **所用技术**：
 
  *  SSM框架
- *  zookeeper
- *  dobbox
- *  AngularJs
- *  Redis
-*  Spring Data Redis
- *  spring security
- *  fastDFS
- *  Solr
- *  spring-data-solr
+ *  zookeeper（服务注册中心）
+ *  dobbox（远程调用服务）
+ *  AngularJs（js封装框架）
+ *  Redis（缓存）
+*  Spring Data Redis（spring对调用redis的封装）
+ *  spring security（安全框架）
+ *  fastDFS（图片服务器）
+ *  Solr（搜索）
+ *  spring-data-solr（spring对调用solr的封装）
  *  freemarker（网页静态化）
+ *  ActiveMQ（消息中间件“JMS”）
+ *  SpringJms（spring对调用jms的封装）
  *  待补充
 
 ### 项目结构
@@ -106,7 +108,9 @@
 >
 > > **`pinyougou-manager-web`**：运营商管理后台，打包方式：`war`，tomcat端口：`9101`
 > >
-> > 依赖：`spring`  `springmvc`  `dubbox` `pinyougou-common` `pinyougou-sellergoods-interface` `SpringSecurity ` `pinyougou-search-interface` `pinyougou-content-interface` `pinyougou-page-interface`
+> > 依赖：`spring`  `springmvc`  `dubbox` `pinyougou-common` `pinyougou-sellergoods-interface` `SpringSecurity `    ~~pinyougou-search-interface~~   `pinyougou-content-interface`   ~~pinyougou-page-interface~~ `activemq-client`
+> >
+> > 使用消息中间件，进行管理：`pinyougou-search-interface` `pinyougou-page-interface`
 >
 > 
 >
@@ -116,7 +120,7 @@
 >
 > 
 >
-> >**`pinyougou-portal-web`**：商城，打包方式：`war`，tomcat端口：`9103`
+> >**`pinyougou-portal-web`**：商城首页，打包方式：`war`，tomcat端口：`9103`
 > >
 > >依赖：`spring` `springmvc` `dubbox` `pinyougou-common` `pinyougou-content-interface`
 >
@@ -124,7 +128,7 @@
 >
 > > **`pinyougou-search-web`**：搜索web项目，打包方式：`war`，tomcat端口：`9104`
 > >
-> > 依赖：`spring` `springmvc` `dubbox` `pinyougou-common` `pinyougou-search-interface`
+> > 依赖：`spring` `springmvc` `dubbox` `pinyougou-common` `pinyougou-search-interface ` `activemq-client`
 >
 > 
 >
@@ -241,7 +245,7 @@
 
 11. `angularJS1` 异常`Error: [$injector:unpr]` 和 `Error: [ng:areq]`：
 
-    ​	跑这个异常说明注入内容有问题，遇到类似异常，检查注入内容是否正确！！ `controller`与`service`之间的注入有问题。检查文件导入是否有问题
+    	跑这个异常说明注入内容有问题，遇到类似异常，检查注入内容是否正确！！ `controller`与`service`之间的注入有问题。检查文件导入是否有问题
 
 12. `dobbox服务提供者` 注册不上，但有没有报错误信息
 
