@@ -36,9 +36,14 @@
         <constructor-arg value="pinyougou_queue_solr_delete"/>
     </bean>
 
-    <!--这个是订阅模式  文本信息-->
+    <!--这个是订阅模式  文本信息，用于创建freemarker静态页面-->
     <bean id="topicPageDestination" class="org.apache.activemq.command.ActiveMQTopic">
         <constructor-arg value="pinyougou_topic_page"/>
+    </bean>
+
+    <!--这个是订阅模式  用于删除freemarker静态页面-->
+    <bean id="topicPageDeleteDestination" class="org.apache.activemq.command.ActiveMQTopic">
+        <constructor-arg value="pinyougou_topic_page_delete"/>
     </bean>
 
 </beans>

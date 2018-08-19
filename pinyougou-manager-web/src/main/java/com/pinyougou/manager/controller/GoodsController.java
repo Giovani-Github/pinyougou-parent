@@ -42,6 +42,8 @@ public class GoodsController {
     private Destination queueSolrDeleteDestination;//用户在索引库中删除记录
     @Autowired
     private Destination topicPageDestination;//用户更新索引库后，发送生成静态页面的消息
+    @Autowired
+    private Destination topicPageDeleteDestination;//用于删除静态网页的消息
 
     @Autowired
     private JmsTemplate jmsTemplate;
@@ -134,6 +136,15 @@ public class GoodsController {
                 }
             });
 
+            //删除残存的静态页面
+            jmsTemplate.send(topicPageDeleteDestination, new MessageCreator() {
+                @Override
+                public Message createMessage(Session session) throws JMSException {
+                    return session.createObjectMessage(ids);
+                }
+            });
+
+
             return new Result(true, "删除成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -197,8 +208,6 @@ public class GoodsController {
                     });
                 }
             }
-
-
 
             return new Result(true, "成功");
         } catch (Exception e) {
