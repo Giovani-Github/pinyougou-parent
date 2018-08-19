@@ -23,7 +23,7 @@ import java.util.Map;
  *
  * @author Administrator
  */
-@Service
+@Service(timeout = 6000)
 @Transactional
 public class GoodsServiceImpl implements GoodsService {
 
@@ -246,10 +246,11 @@ public class GoodsServiceImpl implements GoodsService {
     public List<TbItem> findItemListByGoodsIdandStatus(Long[] goodsIds, String status) {
 
         TbItemExample example = new TbItemExample();
-        com.pinyougou.pojo.TbItemExample.Criteria criteria = example.createCriteria();
+        TbItemExample.Criteria criteria = example.createCriteria();
         criteria.andGoodsIdIn(Arrays.asList(goodsIds));
         criteria.andStatusEqualTo(status);
-        return itemMapper.selectByExample(example);
+        List<TbItem> itemList = itemMapper.selectByExample(example);
+        return itemList;
         
     }
 

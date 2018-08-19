@@ -1,6 +1,5 @@
 package com.pinyougou.page.service.impl;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.pinyougou.mapper.TbGoodsDescMapper;
 import com.pinyougou.mapper.TbGoodsMapper;
 import com.pinyougou.mapper.TbItemCatMapper;
@@ -14,6 +13,7 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfig;
 
 import java.io.FileWriter;
@@ -22,10 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @Author Giovani
- * @Create: 2018/8/18 14:13
- */
 @Service
 public class ItemPageServiceImpl implements ItemPageService {
     @Value("${pagedir}")

@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @author Administrator
  */
-@Service
+@Service(timeout = 7000)
 @Transactional
 public class ItemCatServiceImpl implements ItemCatService {
 

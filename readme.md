@@ -1,4 +1,4 @@
-##  
+## 项目总结
 
 品优购商城项目
 
@@ -128,17 +128,17 @@
 >
 > > **`pinyougou-search-web`**：搜索web项目，打包方式：`war`，tomcat端口：`9104`
 > >
-> > 依赖：`spring` `springmvc`    ~~dubbox~~    `pinyougou-common` `pinyougou-search-interface ` `activemq-client`
-> >
-> > 不用dubbox，使用activeMQ，与其他模块进行交互
+> > 依赖：`spring` `springmvc`   `dubbox` `pinyougou-common` `pinyougou-search-interface ` `activemq-client`
 >
 >
 >
 > > **`pinyougou-page-web`**：商品详情页web项目，打包方式：`war`，tomcat端口：`9105`
 > >
-> > 依赖：`spring` `springmvc` `dubbox` `pinyougou-common` `pinyougou-page-interface`
-
-
+> > 依赖：`spring` `springmvc`  ~~dubbox~~ `pinyougou-common` `pinyougou-page-interface` `activemq-client`
+> >
+> > 不用dubbox，使用activeMQ，与其他模块进行交互
+>
+>
 
 ### 错误总结：
 
@@ -247,7 +247,7 @@
 
 11. `angularJS1` 异常`Error: [$injector:unpr]` 和 `Error: [ng:areq]`：
 
-    	跑这个异常说明注入内容有问题，遇到类似异常，检查注入内容是否正确！！ `controller`与`service`之间的注入有问题。检查文件导入是否有问题
+     跑这个异常说明注入内容有问题，遇到类似异常，检查注入内容是否正确！！ `controller`与`service`之间的注入有问题。检查文件导入是否有问题
 
 12. `dobbox服务提供者` 注册不上，但有没有报错误信息
 
@@ -274,38 +274,138 @@
     18:13:18,246  INFO ZooKeeper:100 - Client environment:user.dir=E:\IdeaProjects\pinyougou-parent\pinyougou-search-service
     ```
 
-    
 
-    > 原因1：
-    >
-    > 服务原本是这样写的：`com.pinyougou.search.service.impl.ItemSearchServiceImpl`
-    >
-    > ```
-    > @Service(timeout = 5000)
-    > public class ItemSearchServiceImpl implements ItemSearchService {
-    > ```
-    >
-    > 配置文件：`applicationContext-service.xml`
-    >
-    > ```
-    > <dubbo:protocol name="dubbo" port="20884"></dubbo:protocol>
-    > ```
-    >
-    > 更改了一下；
-    >
-    > ```
-    > @Service(timeout = 3000)
-    > public class ItemSearchServiceImpl implements ItemSearchService {
-    > ```
-    >
-    > ```
-    > <dubbo:protocol name="dubbo" port="20887"></dubbo:protocol>
-    > ```
-    >
-    > 问题就解决了，重新改回，问题就没发生了。
-    >
-    > 费解，费解.....
-    >
-    > 原因2：`service`没加`com.alibaba.dubbo.config.annotation.Service`注解
 
-13. 
+    > - 原因1：
+    >
+    >   服务原本是这样写的：`com.pinyougou.search.service.impl.ItemSearchServiceImpl`
+    >
+    >   ```
+    >   @Service(timeout = 5000)
+    >   public class ItemSearchServiceImpl implements ItemSearchService {
+    >   ```
+    >
+    >   配置文件：`applicationContext-service.xml`	
+    >
+    >   ```
+    >   <dubbo:protocol name="dubbo" port="20884"></dubbo:protocol>
+    >   ```
+    >
+    >   更改了一下；
+    >
+    >   ```
+    >   @Service(timeout = 3000)
+    >   public class ItemSearchServiceImpl implements ItemSearchService {
+    >   ```
+    >
+    >   ```
+    >   <dubbo:protocol name="dubbo" port="20887"></dubbo:protocol>
+    >   ```
+    >
+    >   问题就解决了，重新改回，问题就没发生了。
+    >
+    >   费解，费解.....
+    >
+    >
+    > - 原因2：`service`没加`com.alibaba.dubbo.config.annotation.Service`注解
+
+13. `IDEA` 中`spring`配置`bean`之后，属性注入的时候，`ref`红色字段问题
+
+    ![](https://raw.githubusercontent.com/Giovani-Github/Giovani-resource/master/markdown-resource/Snipaste_2018-08-19_18-15-32.png)
+
+    > - 原因1：在当前文件中，`idea`没有找到所引入的`bean`。
+    >
+    >   解决方法：在当前文件中创建该`bean`即可`
+    >
+    > - 原因2：该红色字段`bean`不是定义在相同文件中，而是分文件定义的。
+    >
+    >   解决方法如下图：
+    >
+    >   ![](https://raw.githubusercontent.com/Giovani-Github/Giovani-resource/master/markdown-resource/Snipaste_2018-08-19_18-59-44.png)
+    >
+    >   ![](https://raw.githubusercontent.com/Giovani-Github/Giovani-resource/master/markdown-resource/Snipaste_2018-08-19_19-04-10.png)
+    >
+    >   ![](https://raw.githubusercontent.com/Giovani-Github/Giovani-resource/master/markdown-resource/Snipaste_2018-08-19_19-07-34.png)
+    >
+    > - 原因3：通过上诉配置后仍不能解决。该红色字段`bean`不是配置在spring配置文件中，而是通过注解配置
+    >
+    >   解决方法：在该红色字段`bean`的配置文件中，添加包扫描
+    >
+    >   ```
+    >   <context:component-scan base-package="com.pinyougou.page.service"/>
+    >   ```
+    >
+    > - 原因4：包扫描也不是配置项相同文件夹中，且通过原因2配置后，仍不能解决。是因为在`src`没有创建该`beana`
+    >
+    > - 原因5：经过以上仍无法解决。即你用的是`dobbox`，在`dobbx`配置文件中，已经设置了包扫描。但是字段还是红色的，没关系，不影响程序运行
+    >
+    >   ```
+    >   <?xml version="1.0" encoding="UTF-8"?>
+    >   <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    >          xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+    >          xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    >          xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns="http://www.springframework.org/schema/beans"
+    >          xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    >           http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+    >           http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+    >           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    >   
+    >       <!-- 用dubbo协议在20882端口暴露服务 -->
+    >       <dubbo:protocol name="dubbo" port="20884"></dubbo:protocol>
+    >   
+    >       <dubbo:application name="pinyougou-search-service"/>
+    >       <dubbo:registry address="zookeeper://192.168.25.137:2181"/>
+    >       <!-- 包扫描 -->
+    >       <dubbo:annotation package="com.pinyougou.search.service.impl"/>
+    >   
+    >   </beans>
+    >   ```
+
+14. 通过`tb_goods` 表中的字段`goods_id`查不到`tb_item`表中的信息
+
+    > - 原因：初始的数据库，`tb_item`表中的`goods_id`字段全部都是`1`，和`tb_goods`表中的字段`goods_id`是对应不上的，所以查询不到
+    >
+    >   解决方法：自己手动新增新的商品，拿我们新增的商品信息做测试即可
+
+15. `activeMQ`通过广播和订阅模式发布消息，订阅方收不到广播方的消息
+
+    > - 原因：订阅方配置文件中，所订阅的广播者与广播者配置文件中，设置的广播名称不一致
+    >
+    >   ```
+    >   <!--这个是订阅模式  这个是广播者-->
+    >   <bean id="topicPageDestination" class="org.apache.activemq.command.ActiveMQTopic">
+    >   	<!-- 广播者的名称 -->
+    >       <constructor-arg value="pinyougou_topic_page"/>
+    >   </bean>
+    >   ```
+    >
+    >   ```
+    >   <!--订阅模式  这是订阅者  -->
+    >   <bean id="topicPageDestination" class="org.apache.activemq.command.ActiveMQTopic">
+    >       <!-- 要订阅哪一个消息广播者。与上方定义的广播者的名称一致 -->
+    >       <constructor-arg value="pinyougou_topic_page"/>
+    >   </bean>
+    >   ```
+
+16. `zookeeper`无法启动
+
+    启动信息如下：
+
+    ```
+    [root@localhost bin]# ./zkServer.sh start
+    ZooKeeper JMX enabled by default
+    Using config: /root/zookeeper-3.4.13/bin/../conf/zoo.cfg
+    Starting zookeeper ... already running as process 2365.
+    ```
+
+    ```
+    [root@localhost bin]# ./zkServer.sh status
+    ZooKeeper JMX enabled by default
+    Using config: /root/zookeeper-3.4.13/bin/../conf/zoo.cfg
+    Error contacting service. It is probably not running.
+    ```
+
+    > - 原因：`zookeeper/conf/zoo.cfg`文件，`dataDir`属性未正确设置
+    >
+    >   解决方法：参照讲义第一天，设置`zookeeper`
+

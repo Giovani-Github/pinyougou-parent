@@ -8,7 +8,7 @@
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:component-scan base-package="com.pinyougou.search.service.impl"/>
+    <!--<context:component-scan base-package="com.pinyougou.search.service.impl"/>-->
 
     <!-- 真正可以产生Connection的ConnectionFactory，由对应的 JMS服务厂商提供-->
     <bean id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
@@ -31,7 +31,8 @@
         <property name="connectionFactory" ref="connectionFactory"/>
         <property name="destination" ref="queueSolrDestination"/>
         <!-- idea里面，ref字段会报红色，是因为找不到这个bean，通过配置spring配置文件管理，就能解决。
-       而这个比较特殊，没有在xml中配置，是通过注解配置的，所以配置要配置包扫描 -->
+       而这个比较特殊，没有在xml中配置，是通过注解配置的，所以配置要配置包扫描。
+       更特殊的是，本模块使用了dobbox，dobbox配置文件中已经配置了包扫描，所以，红色也不影响程序运行-->
         <property name="messageListener" ref="itemSearchListener"/>
     </bean>
 

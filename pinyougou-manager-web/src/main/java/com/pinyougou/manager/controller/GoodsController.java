@@ -2,7 +2,6 @@ package com.pinyougou.manager.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
-import com.pinyougou.page.service.ItemPageService;
 import com.pinyougou.pojo.TbGoods;
 import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojogroup.Goods;
@@ -35,12 +34,14 @@ public class GoodsController {
     private GoodsService goodsService;
     //    @Reference
     //    private ItemSearchService itemSearchService;
-    @Reference
-    private ItemPageService itemPageService;
+    //    @Reference
+    //    private ItemPageService itemPageService;
     @Autowired
     private Destination queueSolrDestination;//用于发送solr导入的消息
     @Autowired
     private Destination queueSolrDeleteDestination;//用户在索引库中删除记录
+    @Autowired
+    private Destination topicPageDestination;//用户更新索引库后，发送生成静态页面的消息
 
     @Autowired
     private JmsTemplate jmsTemplate;
@@ -133,7 +134,6 @@ public class GoodsController {
                 }
             });
 
-
             return new Result(true, "删除成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -171,7 +171,7 @@ public class GoodsController {
             if (status.equals("1")) {//审核通过
                 List<TbItem> itemList = goodsService.findItemListByGoodsIdandStatus(ids, status);
                 //调用搜索接口实现数据批量导入
-                if (itemList.size() > 0) {
+                //                if (itemList.size() > 0) {
                 //                    itemSearchService.importList(itemList);
 
                 // 调用搜索接口实现数据批量导入，使用activeMQ
@@ -183,15 +183,22 @@ public class GoodsController {
                     }
                 });
 
-                } else {
-                    System.out.println("没有明细数据");
+                //                } else {
+                //                    System.out.println("没有明细数据");
+                //                }
+
+                //静态页生成，使用activeMQ
+                for (final Long goodsId : ids) {
+                    jmsTemplate.send(topicPageDestination, new MessageCreator() {
+                        @Override
+                        public Message createMessage(Session session) throws JMSException {
+                            return session.createTextMessage(goodsId + "");
+                        }
+                    });
                 }
             }
 
-            //静态页生成
-            for (Long goodsId : ids) {
-                itemPageService.genItemHtml(goodsId);
-            }
+
 
             return new Result(true, "成功");
         } catch (Exception e) {
@@ -205,9 +212,9 @@ public class GoodsController {
      *
      * @param goodsId
      */
-    @RequestMapping("/genHtml")
-    public void genHtml(Long goodsId) {
-        itemPageService.genItemHtml(goodsId);
-    }
+    //    @RequestMapping("/genHtml")
+    //    public void genHtml(Long goodsId) {
+    //        itemPageService.genItemHtml(goodsId);
+    //    }
 
 }

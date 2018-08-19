@@ -9,11 +9,13 @@
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <!-- 用dubbo协议在20882端口暴露服务 -->
-    <dubbo:protocol name="dubbo" port="20885"></dubbo:protocol>
+    <!--<dubbo:protocol name="dubbo" port="20885"></dubbo:protocol>-->
 
-    <dubbo:application name="pinyougou-page-service"/>
-    <dubbo:registry address="zookeeper://192.168.25.137:2181"/>
-    <dubbo:annotation package="com.pinyougou.page.service.impl"/>
+    <!--<dubbo:application name="pinyougou-page-service"/>-->
+    <!--<dubbo:registry address="zookeeper://192.168.25.137:2181"/>-->
+    <!--<dubbo:annotation package="com.pinyougou.page.service.impl"/>-->
+
+    <context:component-scan base-package="com.pinyougou.page.service.impl"/>
 
     <!-- 配置freemark -->
     <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
