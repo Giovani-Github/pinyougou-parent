@@ -26,8 +26,10 @@
  *  Solr（搜索）
  *  spring-data-solr（spring对调用solr的封装）
  *  freemarker（网页静态化）
- *  ActiveMQ（消息中间件“JMS”）
+ *  ActiveMQ（消息中间件，“JMS”）
  *  SpringJms（spring对调用jms的封装）
+ *  Spring Boot
+ *  阿里大于（短信服务）
  *  待补充
 
 ### 项目结构
@@ -82,6 +84,12 @@
 >
 >
 >
+> > **`pinyougou-user-interface`**：用户服务接口模块，打包方式：`jar`
+> >
+> > 依赖：`pinyougou-pojo`
+>
+>
+>
 > > **`pinyougou-sellergoods-service`**：商家商品服务模块，打包方式：`war`，tomcat端口：`9001`，dubbo协议在哪个端口暴露服务: `20881`
 > >
 > > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-sellergoods-interface`
@@ -96,13 +104,21 @@
 >
 > > **`pinyougou-search-service`**：搜索服务模块，打包方式：`war`，tomcat端口：	 `9004`，dubbo协议在哪个端口暴露服务: `20884`
 > >
-> > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-search-interface`
+> > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-search-interface` `activemq-client` `solr`
 >
 >
 >
 > > **`pinyougou-page-service`**：网页静态化生成服务模块，打包方式：`war`，tomcat端口：	 `9005`，dubbo协议在哪个端口暴露服务: `20885`
 > >
-> > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-page-interface` `freemarker`
+> > 依赖：`spirng` ~~dubbox~~ `pinyougou-dao` `pinyougou-coommon` `pinyougou-page-interface` `freemarker` `activemq-client`
+> >
+> > 不用dubbox，使用activeMQ，与其他模块进行交互
+>
+>
+>
+> > **`pinyougou-user-service`**：用户服务接口模块，打包方式：`war`，tomcat端口：`9006`，dubbo协议在哪个端口暴露服务: `20886`
+> >
+> > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-user-interface`  `activemq-client`
 >
 >
 >
@@ -128,17 +144,28 @@
 >
 > > **`pinyougou-search-web`**：搜索web项目，打包方式：`war`，tomcat端口：`9104`
 > >
-> > 依赖：`spring` `springmvc`   `dubbox` `pinyougou-common` `pinyougou-search-interface ` `activemq-client`
+> > 依赖：`spring` `springmvc`   `dubbox` `pinyougou-common` `pinyougou-search-interface ` 
 >
 >
 >
 > > **`pinyougou-page-web`**：商品详情页web项目，打包方式：`war`，tomcat端口：`9105`
 > >
-> > 依赖：`spring` `springmvc`  ~~dubbox~~ `pinyougou-common` `pinyougou-page-interface` `activemq-client`
+> > 依赖：`spring` `springmvc`  `dubbox` `pinyougou-common` `pinyougou-page-interface` 
+>
+>
+>
+> > **`pinyougou-user-web`**：用户中心web项目，打包方式：`war`，tomcat端口：`9108`
 > >
-> > 不用dubbox，使用activeMQ，与其他模块进行交互
+> > 依赖：`spring` `springmvc`  `dubbox` `pinyougou-common` `pinyougou-user-interface` 
 >
+
+
+
+> **`giovani-sms-service`**：短信发送微服务，使用springboot搭建，打包方式：`jar`
 >
+> 依赖：`activeMQ` `阿里大于` `spring-boot-starter-web`
+>
+> 监听的消息发布者：`sms`
 
 ### 错误总结：
 
@@ -408,4 +435,6 @@
     > - 原因：`zookeeper/conf/zoo.cfg`文件，`dataDir`属性未正确设置
     >
     >   解决方法：参照讲义第一天，设置`zookeeper`
+
+17. `dobbox`成功调用服务层，但是还报`timout`错误，就在服务层类上，加注解`@Serivce(timeout = 5000 )`
 
