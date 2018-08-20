@@ -60,4 +60,21 @@ public interface UserService {
      */
     public PageResult findPage(TbUser user, int pageNum, int pageSize);
 
+    /**
+     * 生成短信验证码
+     *
+     * @return
+     */
+    public void createSmsCode(final String phone);
+
+    /**
+     * 校验验证码是否与redis中存放的一样
+     *
+     * @param
+     * @return boolean
+     * @Author Giovani
+     * @Date 2018/8/20 21:38
+     */
+    public boolean checkSmsCode(String phone, String code);
+
 }

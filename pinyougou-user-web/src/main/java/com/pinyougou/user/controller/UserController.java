@@ -50,8 +50,14 @@ public class UserController {
      * @return
      */
     @RequestMapping("/add")
-    public Result add(@RequestBody TbUser user) {
+    public Result add(@RequestBody TbUser user, String smscode) {
         try {
+            // 判断验证码是否正确
+            boolean checkSmsCode = userService.checkSmsCode(user.getPhone(), smscode);
+            if (checkSmsCode == false) {
+                return new Result(false, "验证码输入错误！");
+            }
+
             userService.add(user);
             return new Result(true, "增加成功");
         } catch (Exception e) {
@@ -108,7 +114,7 @@ public class UserController {
     /**
      * 查询+分页
      *
-     * @param brand
+     * @param user
      * @param page
      * @param rows
      * @return
@@ -118,4 +124,15 @@ public class UserController {
         return userService.findPage(user, page, rows);
     }
 
+    @RequestMapping("/sendCode")
+    public Result sendCode(String phone) {
+        try {
+            userService.createSmsCode(phone);//生成验证码
+            return new Result(true, "验证码发送成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(true, "验证码发送失败");
+        }
+
+    }
 }
