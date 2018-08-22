@@ -7,6 +7,7 @@ import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojo.TbOrderItem;
 import com.pinyougou.pojogroup.Cart;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -21,6 +22,8 @@ public class CartServiceImpl implements CartService {
 
     @Autowired
     private TbItemMapper itemMapper;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Override
     public List<Cart> addGoodsToCartList(List<Cart> cartList, Long itemId, Integer num) {
@@ -136,5 +139,22 @@ public class CartServiceImpl implements CartService {
         orderItem.setTotalFee(new BigDecimal(item.getPrice().doubleValue() * num));
         return orderItem;
     }
+
+    @Override
+    public List<Cart> findCartListFromRedis(String username) {
+        System.out.println("从redis中提取购物车数据....." + username);
+        List<Cart> cartList = (List<Cart>) redisTemplate.boundHashOps("cartList").get(username);
+        if (cartList == null) {
+            cartList = new ArrayList();
+        }
+        return cartList;
+    }
+
+    @Override
+    public void saveCartListToRedis(String username, List<Cart> cartList) {
+        System.out.println("向redis存入购物车数据....." + username);
+        redisTemplate.boundHashOps("cartList").put(username, cartList);
+    }
+
 }
 

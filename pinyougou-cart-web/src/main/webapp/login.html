@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<!--
+    该页面在security中没登录不能访问，如果当前没登录，
+    访问该页面，就会跳到登录页面。登陆后，重新回到该页面。
+    该页面有执行了一个跳转功能。 跳到购物车页面。
+
+    效果：购物车页面点击跳转到该页面，
+    security检车到未登录，执行登录页面。
+    再重新跳转回该页面。该页面跳转回购物车页面
+ -->
+<script type="text/javascript">
+    location.href = 'cart.html';
+</script>
+</body>
+</html>

@@ -6,6 +6,7 @@ import com.pinyougou.cart.service.CartService;
 import com.pinyougou.pojogroup.Cart;
 import entity.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import utils.CookieUtil;
@@ -24,7 +25,7 @@ import java.util.List;
 @RequestMapping("/cart")
 public class CartController {
 
-    @Reference
+    @Reference(timeout = 6000)
     private CartService cartService;
 
     @Autowired
@@ -40,12 +41,24 @@ public class CartController {
      */
     @RequestMapping("/findCartList")
     public List<Cart> findCartList() {
-        String cartListString = CookieUtil.getCookieValue(request, "cartList", "UTF-8");
-        if (cartListString == null || cartListString.equals("")) {
-            cartListString = "[]";
+
+        //得到登陆人账号,判断当前是否有人登陆
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (username.equals("anonymousUser")) {//如果未登录
+            // 读取本地购物车
+            String cartListString = CookieUtil.getCookieValue(request, "cartList", "UTF-8");
+            if (cartListString == null || cartListString.equals("")) {
+                cartListString = "[]";
+            }
+            List<Cart> cartList_cookie = JSON.parseArray(cartListString, Cart.class);
+            return cartList_cookie;
+        } else {
+            //从redis中提取
+            List<Cart> cartList_redis = cartService.findCartListFromRedis(username);
+            return cartList_redis;
+
         }
-        List<Cart> cartList_cookie = JSON.parseArray(cartListString, Cart.class);
-        return cartList_cookie;
+
     }
 
     /**
@@ -58,9 +71,22 @@ public class CartController {
     @RequestMapping("/addGoodsToCartList")
     public Result addGoodsToCartList(Long itemId, Integer num) {
         try {
+            //得到登陆人账号,判断当前是否有人登陆
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            System.out.println("当前登录用户：" + username);
+
             List<Cart> cartList = findCartList();//获取购物车列表
+            //调用服务方法操作购物车
             cartList = cartService.addGoodsToCartList(cartList, itemId, num);
-            CookieUtil.setCookie(request, response, "cartList", JSON.toJSONString(cartList), 3600 * 24, "UTF-8");
+
+            if (username.equals("anonymousUser")) { //如果是未登录，保存到cookie
+                cartList = cartService.addGoodsToCartList(cartList, itemId, num);
+                CookieUtil.setCookie(request, response, "cartList", JSON.toJSONString(cartList), 3600 * 24, "UTF-8");
+                System.out.println("向cookie存入数据");
+            } else {
+                cartService.saveCartListToRedis(username, cartList);
+            }
+
             return new Result(true, "添加成功");
         } catch (Exception e) {
             e.printStackTrace();
