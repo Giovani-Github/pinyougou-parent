@@ -91,6 +91,12 @@
 >
 >
 >
+> > **`pinyougou-cart-interface`**：购物车服务接口模块，打包方式：`jar`
+> >
+> > 依赖：`pinyougou-pojo`
+>
+>
+>
 > > **`pinyougou-sellergoods-service`**：商家商品服务模块，打包方式：`war`，tomcat端口：`9001`，dubbo协议在哪个端口暴露服务: `20881`
 > >
 > > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-sellergoods-interface`
@@ -117,9 +123,15 @@
 >
 >
 >
-> > **`pinyougou-user-service`**：用户服务接口模块，打包方式：`war`，tomcat端口：`9006`，dubbo协议在哪个端口暴露服务: `20886`
+> > **`pinyougou-user-service`**：用户服务模块，打包方式：`war`，tomcat端口：`9006`，dubbo协议在哪个端口暴露服务: `20886`
 > >
 > > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-user-interface`  `activemq-client`
+>
+>
+>
+> > **`pinyougou-user-service`**：购物车服务模块，打包方式：`war`，tomcat端口：`9007`，dubbo协议在哪个端口暴露服务: `20887`
+> >
+> > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-cart-interface`  
 >
 >
 >
@@ -159,6 +171,12 @@
 > >
 > > 依赖：`spring` `springmvc`  `dubbox` `pinyougou-common` `pinyougou-user-interface` 
 >
+>
+>
+> > **`pinyougou-cart-web`**：购物车web项目，打包方式：`war`，tomcat端口：`9107`
+> >
+> > 依赖：`spring` `springmvc`  `dubbox` `pinyougou-common` `pinyougou-cart-interface` 
+>
 
 
 
@@ -167,6 +185,16 @@
 > 依赖：`activeMQ` `阿里大于` `spring-boot-starter-web`
 >
 > 监听的消息发布者：`sms`
+
+
+
+> **`apache-tomcat-7.0.52-cas`**：用户中心单点登录服务，使用cas，tomcat端口：`9100`
+
+
+
+> **`apache-tomcat-7.0.52-solr：`**  itme表(sku)数据缓存服务，使用solr，tomcat端口：`8080`
+
+
 
 ### 错误总结：
 
