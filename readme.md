@@ -30,6 +30,7 @@
  *  SpringJms（spring对调用jms的封装）
  *  Spring Boot
  *  阿里大于（短信服务）
+ *  CAS（单点登录）
  *  待补充
 
 ### 项目结构
