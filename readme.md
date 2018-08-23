@@ -176,7 +176,7 @@
 >
 > > **`pinyougou-cart-web`**：购物车web项目，打包方式：`war`，tomcat端口：`9107`
 > >
-> > 依赖：`spring` `springmvc`  `dubbox` `pinyougou-common` `pinyougou-cart-interface` 
+> > 依赖：`spring` `springmvc`  `dubbox` `pinyougou-common` `pinyougou-cart-interface` `pinyougou-user-interface`
 >
 
 

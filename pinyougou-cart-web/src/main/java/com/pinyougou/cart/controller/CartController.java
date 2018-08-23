@@ -26,7 +26,7 @@ import java.util.List;
 @RequestMapping("/cart")
 public class CartController {
 
-    @Reference(timeout = 6000)
+    @Reference(timeout = 7000)
     private CartService cartService;
 
     @Autowired
@@ -89,7 +89,6 @@ public class CartController {
         //        response.setHeader("Access-Control-Allow-Origin", "http://localhost:9105");
         // 可以跨域接收cookie
         //        response.setHeader("Access-Control-Allow-Credentials", "true");
-
 
         try {
             //得到登陆人账号,判断当前是否有人登陆

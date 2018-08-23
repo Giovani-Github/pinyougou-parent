@@ -10,7 +10,7 @@ app.service('cartService', function ($http) {
         return $http.get('cart/addGoodsToCartList.do?itemId=' + itemId + '&num=' + num);
     }
 
-    
+
     //求合计
     this.sum = function (cartList) {
         var totalValue = {totalNum: 0, totalMoney: 0.00};//合计实体
@@ -24,5 +24,11 @@ app.service('cartService', function ($http) {
         }
         return totalValue;
     }
+
+    //获取地址列表
+    this.findAddressList = function () {
+        return $http.get('address/findListByLoginUser.do');
+    }
+
 
 });
