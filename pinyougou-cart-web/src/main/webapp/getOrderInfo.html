@@ -246,11 +246,11 @@
     <div class="clearfix trade">
         <div class="fc-price">应付金额:　<span class="price">¥{{totalValue.totalMoney.toFixed(2)}}</span></div>
     </div>
-        <div class="fc-receiverInfo">寄送至:{{address.address}} 收货人：{{address.contact}} {{address.mobile}}</div>
-    </div>
-    <div class="submit">
-        <a class="sui-btn btn-danger btn-xlarge" href="pay.html">提交订单</a>
-    </div>
+    <div class="fc-receiverInfo">寄送至:{{address.address}} 收货人：{{address.contact}} {{address.mobile}}</div>
+</div>
+<div class="submit">
+    <a class="sui-btn btn-danger btn-xlarge" ng-click="submitOrder()">提交订单</a>
+</div>
 </div>
 <!-- 底部栏位 -->
 <!--页面底部-->

@@ -98,6 +98,12 @@
 >
 >
 >
+> > **`pinyougou-order-interface`**：订单服务接口模块，打包方式：`jar`
+> >
+> > 依赖：`pinyougou-pojo`
+>
+>
+>
 > > **`pinyougou-sellergoods-service`**：商家商品服务模块，打包方式：`war`，tomcat端口：`9001`，dubbo协议在哪个端口暴露服务: `20881`
 > >
 > > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-sellergoods-interface`
@@ -133,6 +139,12 @@
 > > **`pinyougou-user-service`**：购物车服务模块，打包方式：`war`，tomcat端口：`9007`，dubbo协议在哪个端口暴露服务: `20887`
 > >
 > > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-cart-interface`  
+>
+>
+>
+> > **`pinyougou-order-service`**：订单服务模块，打包方式：`war`，tomcat端口：	 `9009`，dubbo协议在哪个端口暴露服务: `20889`
+> >
+> > 依赖：`spirng` `dubbox` `pinyougou-dao` `pinyougou-coommon` `pinyougou-order-interface`
 >
 >
 >
@@ -176,7 +188,7 @@
 >
 > > **`pinyougou-cart-web`**：购物车web项目，打包方式：`war`，tomcat端口：`9107`
 > >
-> > 依赖：`spring` `springmvc`  `dubbox` `pinyougou-common` `pinyougou-cart-interface` `pinyougou-user-interface`
+> > 依赖：`spring` `springmvc`  `dubbox` `pinyougou-common` `pinyougou-cart-interface` `pinyougou-user-interface` `pinyougou-order-interface`
 >
 
 
@@ -469,4 +481,10 @@
 17. `dobbox`成功调用服务层，但是还报`timout`错误，就在服务层类上，加注解`@Serivce(timeout = 5000 )`
 
 18. 注意：`maven`中修改了服务接口实现层的代码，接口层也要重新安装一下
+
+19. 注意：由于工程太多，可能导致内存不足，无法正常新开启工程
+
+20. `dubbox`启动报`java.lang.ClassNotFoundException: javassist.ClassPath`
+
+    `dubbox`依赖的`javassist`没导入
 
