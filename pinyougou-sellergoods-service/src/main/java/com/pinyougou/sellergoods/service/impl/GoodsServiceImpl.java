@@ -238,6 +238,16 @@ public class GoodsServiceImpl implements GoodsService {
             TbGoods goods = goodsMapper.selectByPrimaryKey(id);
             goods.setAuditStatus(status);
             goodsMapper.updateByPrimaryKey(goods);
+
+            // 改变sku表状态
+            TbItemExample example = new TbItemExample();
+            TbItemExample.Criteria criteria = example.createCriteria();
+            criteria.andGoodsIdEqualTo(goods.getId());
+            List<TbItem> itemList = itemMapper.selectByExample(example);
+            for (TbItem item : itemList) {
+                item.setStatus("1");
+                itemMapper.updateByPrimaryKey(item);
+            }
         }
 
     }

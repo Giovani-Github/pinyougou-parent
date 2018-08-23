@@ -22,10 +22,10 @@
         var skuList = [
             <#list itemList as item>
                 {
-                    "id":${item.id?c},
-                    "title": "${item.title!''}",
-                    "price":${item.price?c},
-                    "spec": ${item.spec}
+                    id:${item.id?c},
+                    title: '${item.title}',
+                    price:${item.price?c},
+                    spec: ${item.spec}
                 },
             </#list>
         ];
@@ -172,7 +172,7 @@
                         <div class="fl">
                             <ul class="btn-choose unstyled">
                                 <li>
-                                    <a ng-click="addToCart()" href="cart.html" target="_blank"
+                                    <a ng-click="addToCart()" target="_blank"
                                        class="sui-btn  btn-danger addshopcar">加入购物车</a>
                                 </li>
                             </ul>
